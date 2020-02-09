@@ -483,9 +483,9 @@ class rosee extends eqLogic {
                     } else {
                         // Température trop chaude
                             // Cas 0
-                                $msg_givre = $msg_givre_0;
-                                $msg_givre_num = $msg_givre_num_0;
-                                $alert_g  = $alert_g_0;
+                                $msg_givre = 'Aucun risque de Givre';
+                                $msg_givre_num = 0;
+                                $alert_g  = 0;
                                 $frost_point = 999;
                                 $msg_givre2 ='│ │ Info supplémentaire : Il fait trop chaud pas de calcul de l\'alerte givre';
                                 $msg_givre3 ='│ │ Info supplémentaire : Point de givre fixé à '.$frost_point ;
