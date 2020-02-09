@@ -23,8 +23,8 @@ description: Ce plugin permet d'obtenir le point de rosée pour savoir si l'herb
 - Correction type de générique
 - Posibilité d'enregistrer l'équipement sans les champs obligatoires si l'équipement n'est pas actif
 - Modification affichage des commandes
-    - Ajout la posibilité d'inverser les commandes binaires
-    - Suppression de l'historique sur les commandes messages
+    >- Ajout la posibilité d'inverser les commandes binaires
+    >- Suppression de l'historique sur les commandes messages
 - Ajout des nouvelles commandes en automatique sans recréer les commandes (Merci à Kiboost et à Mips)
 - Modification du type de données pour les seuils => Uniquement numérique
 - Ajout d'un seuil d'humidité absolue pour le calcul de l'alerte de givre
