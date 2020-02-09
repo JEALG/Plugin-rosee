@@ -15,10 +15,10 @@ description: Ce plugin permet d'obtenir le point de rosée pour savoir si l'herb
 - Nettoyage du code
 - Nouveau calcul pour la gestion de l'alerte givre
 - Ajout d'un message pour le type de givre ainsi que d'une valeur numérique suivant le code https://pon.fr/dzvents-alerte-givre-et-calcul-humidite-absolue/
-    - CAS 0 : Message =  *Aucun risque de Givre*, Alerte givre = *0*, Message numérique = *0*
-    - CAS 1 : Message =  *Givre peu probable malgré la température*, Alerte givre = *1*, Message numérique = *1*
-    - CAS 2 : Message =  *Risque de givre*, Alerte givre = *1*, Message numérique = *2*
-    - CAS 3 : Message =  *Givre, Présence de givre*, Alerte givre = *1*, Message numérique = *3*
+    >- CAS 0 : Message =  *Aucun risque de Givre*, Alerte givre = *0*, Message numérique = *0*
+    >- CAS 1 : Message =  *Givre peu probable malgré la température*, Alerte givre = *1*, Message numérique = *1*
+    >- CAS 2 : Message =  *Risque de givre*, Alerte givre = *1*, Message numérique = *2*
+    >- CAS 3 : Message =  *Givre, Présence de givre*, Alerte givre = *1*, Message numérique = *3*
 - Changement du logo du plugin merci @mich0111
 - Correction type de générique
 - Posibilité d'enregistrer l'équipement sans les champs obligatoires si l'équipement n'est pas actif
