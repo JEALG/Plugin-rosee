@@ -371,6 +371,9 @@ class rosee extends eqLogic {
 
         // Pas de calcul si température
                 if($temperature <= 10) {
+                    /*  ********************** Annulation Message spécifique Température >10° *************************** */
+                        $msg_givre2 ='│ │';
+                        $msg_givre3 ='│ │';
         
                     /*  ********************** Calcul du point de givrage *************************** */
                         $temp_kelvin = $temperature + 273.15;
