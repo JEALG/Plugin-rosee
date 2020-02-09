@@ -24,30 +24,30 @@ Voici un exemple de configuration
 
 # Alerte Givre
 Le plugin calcule 4 niveaux d'alerte
-    - Cas 0
-        >- Calcul : Aucun cas ci-dessous couvert
-        >- Alerte Givre : 0
-        >- Alerte Rosée : Automatique
-        >- Message numérique Givre : 0
-        >- Message d'info : Aucun risque de Givrage
-    - Cas 1
-        >- Calcul : (Température <=1 et Point de Givrage <= 0) et (Humidité absolue en (gr/m3) < Seuil d'humidité absolue)
-        >- Alerte Givre : 1
-        >- Alerte Rosée : forcé à 0
-        >- Message numérique Givre : 1
-        >- Message d'info : Givre peu probable malgré la température
-    - Cas 2
-        >- Calcul : (Température <=4 et Point de Givrage <= 0.5)
-        >- Alerte Givre : 1
-        >- Alerte Rosée : forcé à 0
-        >- Message numérique Givre : 2
-        >- Message d'info : Risque de givre
-     - Cas 3
-        >- Calcul : (Température <=1 et Point de Givrage <= 0) et (Humidité absolue en (gr/m3) > Seuil d'humidité absolue)
-        >- Alerte Givre : 1
-        >- Alerte Rosée : forcé à 0
-        >- Message numérique Givre : 3
-        >- Message d'info : Givre, Présence de givre 
+- Cas N°0 :
+    >- Calcul : Aucun cas ci-dessous couvert
+    >- Alerte Givre : 0
+    >- Alerte Rosée : Automatique
+    >- Message numérique Givre : 0
+    >- Message d'info : Aucun risque de Givrage
+- Cas N°1 :
+    >- Calcul : (Température <=1 et Point de Givrage <= 0) et (Humidité absolue en (gr/m3) < Seuil d'humidité absolue)
+    >- Alerte Givre : 1
+    >- Alerte Rosée : forcé à 0
+    >- Message numérique Givre : 1
+    >- Message d'info : Givre peu probable malgré la température
+- Cas N°2 :
+    >- Calcul : (Température <=4 et Point de Givrage <= 0.5)
+    >- Alerte Givre : 1
+    >- Alerte Rosée : forcé à 0
+    >- Message numérique Givre : 2
+    >- Message d'info : Risque de givre
+- Cas N°3 :
+    >- Calcul : (Température <=1 et Point de Givrage <= 0) et (Humidité absolue en (gr/m3) > Seuil d'humidité absolue)
+    >- Alerte Givre : 1
+    >- Alerte Rosée : forcé à 0
+    >- Message numérique Givre : 3
+    >- Message d'info : Givre, Présence de givre
 
 # FAQ
 
