@@ -26,18 +26,55 @@ function rosee_install() {
     if (is_object($cron)) {
         $cron->remove();
     }
+    //message::add('rosee', 'Merci pour la mise à jour de ce plugin, le plugin a été repris par JAG, merci à Claude Metzger pour son boulot');
 }
 
 function rosee_update() {
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1)
         config::save('functionality::cron5::enable', 1, 'rosee');
+    
     if (config::byKey('functionality::cron30::enable', 'rosee', -1) == -1)
         config::save('functionality::cron30::enable', 0, 'rosee');
     $cron = cron::byClassAndFunction('rosee', 'pull');
+    
     if (is_object($cron)) {
         $cron->remove();
     }
+    
+    $plugin = plugin::byId('rosee');
+	$eqLogics = eqLogic::byType($plugin->getId());
+    foreach ($eqLogics as $eqLogic)
+        {
+            updateLogicalId($eqLogic, 'Point de rosée', 'rosee_point');
+            updateLogicalId($eqLogic, 'Humidité absolue', 'humidite_absolue');
+        }
+    
+    //resave eqs for new cmd:
+        try
+        {
+            $eqs = eqLogic::byType('rosee');
+            foreach ($eqs as $eq)
+            {
+                $eq->save();
+            }
+        }
+        catch (Exception $e)
+        {
+            $e = print_r($e, 1);
+            log::add('rosee', 'error', 'rosee_update ERROR: '.$e);
+        }
+
+    message::add('rosee', 'Merci pour la mise à jour de ce plugin, le plugin a été repris par JAG, merci à Claude Metzger pour son boulot');
 }
+
+function updateLogicalId($eqLogic, $from, $to) {
+	$roseeCmd = $eqLogic->getCmd(null, $from);
+	if (is_object($roseeCmd)) {
+		$roseeCmd->setLogicalId($to);
+		$roseeCmd->save();
+	}
+}
+
 
 function rosee_remove() {
     $cron = cron::byClassAndFunction('rosee', 'pull');

@@ -36,10 +36,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 	<div class="col-xs-12 eqLogic" style="display: none;">
 		<div class="input-group pull-right" style="display:inline-flex">
 			<span class="input-group-btn">
-				<a class="btn btn-default btn-sm eqLogicAction roundedLeft" data-action="configure"><i class="fas fa-cogs"></i> {{Configuration avancée}}</a>
-                <a class="btn btn-default btn-sm eqLogicAction" data-action="copy"><i class="fas fa-copy"></i> {{Dupliquer}}</a>
-                <a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}</a>
-                <a class="btn btn-danger btn-sm eqLogicAction roundedRight" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
+				<a class="btn btn-default btn-sm eqLogicAction roundedLeft" data-action="configure"><i class="fas fa-cogs"></i> {{Configuration avancée}}</a><a class="btn btn-default btn-sm eqLogicAction" data-action="copy"><i class="fas fa-copy"></i> {{Dupliquer}}</a><a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}</a><a class="btn btn-danger btn-sm eqLogicAction roundedRight" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
 			</span>
 		</div>
 
@@ -110,9 +107,21 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<legend><i class="fas fa-cog"></i> {{Paramètres}}</legend>
 				<form class="form-horizontal col-sm-10">
 					<fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" hidden>{{Type de Calcul}}
+                                <sup><i class="fas fa-question-circle" title="{{En cours de développement}}"></i></sup>
+                            </label>
+                            <div class="col-sm-3" hidden>
+                                <select disabled class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="type_calcul">
+                                    <option value=''>{{Rosée et Givre}}</option>
+                                    <option value='rosee'>{{Rosée}}</option>
+                                    <option value='givre'>{{Givre}}</option>
+                                </select>
+                            </div>
+                        </div>
 						<div class="form-group">
 							<label class="col-md-2 control-label">{{Température}}
-								<sup><i class="fas fa-question-circle" title="{{Commande température.}}"></i></sup>
+								<sup><i class="fas fa-question-circle" title="{{Commande température en °C.}}"></i></sup>
 							</label>
 							<div class="col-md-6">
 								<div class="input-group">
@@ -153,8 +162,16 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<label class="col-sm-2 control-label">{{Seuil (°C)}}
 								<sup><i class="fas fa-question-circle" title="{{Seuil de déclenchement de l'alerte rosée, 2°C par défaut (dépression du point de rosée T°-Tr°) A ajuster en fonction des observations locales.}}"></i></sup>
 							</label>
-							<div class="col-md-2">
-                                <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="DPR" placeholder="{{2}}">
+							<div class="col-md-1">
+                                <input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="DPR" placeholder="{{2.0}}">
+							</div>
+						</div>
+                        <div class="form-group">
+							<label class="col-sm-2 control-label">{{Seuil d'humidité absolue}}
+								<sup><i class="fas fa-question-circle" title="{{Seuil d'humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut.}}"></i></sup>
+							</label>
+							<div class="col-md-1">
+                                <input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="SHA" placeholder="{{2.8}}">
 							</div>
 						</div>
 					</fieldset>
@@ -167,11 +184,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
 					<thead>
 						<tr>
 							<th width="50px"> ID</th>
-							<th width="250px">{{Nom}}</th>
+							<th width="450px">{{Nom}}</th>
 							<th>{{Valeur}}</th>
 							<th>{{Unité}}</th>
 							<th>{{Paramètres}}</th>
 							<th width="120px;">{{Options}}</th>
+                            <th style="width: 40px;"></th>
 						</tr>
 					</thead>
 					<tbody>

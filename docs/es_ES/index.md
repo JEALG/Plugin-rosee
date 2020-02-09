@@ -1,6 +1,6 @@
 # Description
 
-Ce plugin permet d'obtenir le point de rosée pour savoir si l'herbe sera mouillée le matin, ou bien en hiver savoir si il va falloir gratter le pare-brise.
+Ce plugin permet d'obtenir le point de rosée pour savoir si l'herbe sera mouillée le matin, ou bien en hiver savoir s'il va falloir gratter le pare-brise.
 Pour fonctionner, on doit indiquer un équipement température et un équipement humidité (extérieures, bien-sûr…)
 
 # Configuration
@@ -13,6 +13,7 @@ Le plugin ne comporte pas de configuration générale, il faut ajouter :
 En option
 > - Equipement "Pression Atmosphérique" : Pression atmosphérique réelle sur le site. 1013.25 hPa par défaut si non renseignée
 > - Seuil (°C) : Seuil de déclenchement de l'alerte rosée, 2°C par défaut (dépression du point de rosée T°-Tr°) A ajuster en fonction des observations locales.
+> - Seuil d'hunidité absolue : Seuil humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut
 
 # Exemple de configuration
 
@@ -20,6 +21,33 @@ Voici un exemple de configuration
 
 ![exemple](../images/equipement.png)
 ![exemple](../images/commandes.png)
+
+# Alerte Givre
+Le plugin calcule 4 niveaux d'alerte
+    - Cas 0
+        >- Calcul : Aucun cas ci-dessous couvert
+        >- Alerte Givre : 0
+        >- Alerte Rosée : Automatique
+        >- Message numérique Givre : 0
+        >- Message d'info : Aucun risque de Givrage
+    - Cas 1
+        >- Calcul : (Température <=1 et Point de Givrage <= 0) et (Humidité absolue en (gr/m3) < Seuil d'hunidité absolue)
+        >- Alerte Givre : 1
+        >- Alerte Rosée : forcé à 0
+        >- Message numérique Givre : 1
+        >- Message d'info : Givre peu probable malgré la température
+    - Cas 2
+        >- Calcul : (Température <=4 et Point de Givrage <= 0.5)
+        >- Alerte Givre : 1
+        >- Alerte Rosée : forcé à 0
+        >- Message numérique Givre : 2
+        >- Message d'info : Risque de givre
+     - Cas 3
+        >- Calcul : (Température <=1 et Point de Givrage <= 0) et (Humidité absolue en (gr/m3) > Seuil d'hunidité absolue)
+        >- Alerte Givre : 1
+        >- Alerte Rosée : forcé à 0
+        >- Message numérique Givre : 3
+        >- Message d'info : Givre, Présence de givre 
 
 # FAQ
 
@@ -49,6 +77,7 @@ Voici un exemple de configuration
 >
 >On peut rechercher les équipements grace au bouton de recherche de l’équipement
 
-- le plugin affiche 999.99 dans le champ "valeur" pour le point de givrage, pourquoi ?
+- Le point de givrage indique la valeur 999
 
->Le calcul du point de givrage n’a de sens que si la température est négative. En cas de température positive, le calcul ne se fait pas et le plugin indique une valeur de 999.999, c’est normal. A l’affichage, la tuile n’indique la valeur du point de givrage que si elle est valide
+>La température dépasse 10°C donc le point de givrage n'est plus calculé..
+>
