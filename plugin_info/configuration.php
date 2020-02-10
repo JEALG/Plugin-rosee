@@ -27,7 +27,7 @@ if (!isConnect()) {
     $(function() {
         $('#div_confPlugin > .panel.panel-primary').hide()
     })
-
+    
     $("input[data-l1key='functionality::cron5::enable']").on('change',function(){
         if ($(this).is(':checked')) $("input[data-l1key='functionality::cron30::enable']").prop("checked", false)
     });

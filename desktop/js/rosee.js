@@ -15,7 +15,7 @@
  */
 $('#bt_selectTempCmd').on('click', function () {
 	jeedom.cmd.getSelectModal({cmd: {type: 'info', subType: 'numeric'}}, function (result) {
-		$('.eqLogicAttr[data-l2key=temperature]').atCaret('insert', result.human);
+        $('.eqLogicAttr[data-l2key=temperature]').atCaret('insert', result.human);
 	});
 });
 

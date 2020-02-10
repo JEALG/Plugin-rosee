@@ -7,29 +7,30 @@ description: Ce plugin permet d'obtenir le point de rosée pour savoir si l'herb
 # Info
 >*Important : en cas de mise à jour disponible pour laquelle il n’y a pas d’information dans cette section, c’est qu’elle n’intègre aucune nouveauté majeure. Cela peut être un ajout de documentation, une correction de documentation, des traductions ou bien de la correction de bugs mineurs.*
 
-# Version 201902xx
+# Version 20190209
 
 >*Info : Changement de l'auteur du plugin, merci @claude.metzger*
 
 - Ajout de log supplémentaire en mode DEBUG
-- Nettoyge du code
+- Nettoyage du code
 - Nouveau calcul pour la gestion de l'alerte givre
-- Ajout d'un message pour le type de givre ainsi que d'une valeur numérique suivant le code https://pon.fr/dzvents-alerte-givre-et-calcul-humidite-absolue/
-    - CAS 0 : Message =  *Aucun risque de Givre*, Alerte givre = *0*, Message numérique = *0*
-    - CAS 1 : Message =  *Givre peu probable malgré la température*, Alerte givre = *1*, Message numérique = *1*
-    - CAS 2 : Message =  *Risque de givre*, Alerte givre = *1*, Message numérique = *2*
-    - CAS 3 : Message =  *Givre, Présence de givre*, Alerte givre = *1*, Message numérique = *3*
+- Ajout d'un message pour le type de givre ainsi que d'une valeur numérique suivant le code <a href="https://pon.fr/dzvents-alerte-givre-et-calcul-humidite-absolue/">https://pon.fr/dzvents-alerte-givre-et-calcul-humidite-absolue</a>
+    >- CAS N°0 : Message =  *Aucun risque de Givre*, Alerte givre = *0*, Message numérique = *0*
+    >- CAS N°1 : Message =  *Givre peu probable malgré la température*, Alerte givre = *1*, Message numérique = *1*
+    >- CAS N°2 : Message =  *Risque de givre*, Alerte givre = *1*, Message numérique = *2*
+    >- CAS N°3 : Message =  *Givre, Présence de givre*, Alerte givre = *1*, Message numérique = *3*
 - Changement du logo du plugin merci @mich0111
 - Correction type de générique
-- Posibilité d'enregistré l'équipement sans les champs obligatoires si l'équipement n'est pas actif
+- Posibilité d'enregistrer l'équipement sans les champs obligatoires si l'équipement n'est pas actif
 - Modification affichage des commandes
-    - Ajout la posibilité d'inverser les commandes binaires
-    - Suppression de l'historique sur les commandes messages
+    >- Ajout la posibilité d'inverser les commandes binaires
+    >- Suppression de l'historique sur les commandes messages
 - Ajout des nouvelles commandes en automatique sans recréer les commandes (Merci à Kiboost et à Mips)
 - Modification du type de données pour les seuils => Uniquement numérique
 - Ajout d'un seuil d'humidité absolue pour le calcul de l'alerte de givre
-- Pas de calcul des infos de givres si la température est supérieur de 10°C
-    >*Remarque : Il est obligatoire de sauvegarder chaque équipements pour avoir les nouvelles commandes*
+- Pas de calcul des infos de givres si la température est supérieure à 10°C
+
+    >*Remarque : Il est obligatoire de sauvegarder chaque équipement pour avoir les nouvelles commandes*
 
 # Version 3.3.2
 

@@ -464,9 +464,9 @@ class rosee extends eqLogic {
                         $msg_givre = 'Aucun risque de Givre';
                         $msg_givre_num = 0;
                         $alert_g  = 0;
-                        $frost_point = 999;
+                        $frost_point = $temperature;
                             $msg_givre2 ='│ │ Info supplémentaire : Il fait trop chaud pas de calcul de l\'alerte givre';
-                            $msg_givre3 ='│ │ Info supplémentaire : Point de givre fixé à '.$frost_point ;
+                            $msg_givre3 ='│ │ Info supplémentaire : Point de givre fixé est égal à la température : '.$temperature .' = '.$frost_point ;
             };
                 log::add('rosee', 'debug', '│ ┌───────── CAS ACTUEL N°'.$msg_givre_num .' : ' .$msg_givre .' / Alerte givre : ' .$alert_g );
                 log::add('rosee', 'debug', '│ │ Message : ' .$msg_givre );
