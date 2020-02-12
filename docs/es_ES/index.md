@@ -77,7 +77,7 @@ Le plugin calcule 4 niveaux d'alerte
 >
 >On peut rechercher les équipements grace au bouton de recherche de l’équipement.
 
-- Le point de givrage indique la valeur 999
+- Le point de givrage est égal à la température
 
 >La température dépasse 10°C donc le point de givrage n'est plus calculé.
 >
