@@ -303,6 +303,18 @@ class rosee extends eqLogic {
             }
                 log::add('rosee', 'debug', '│ Seuil d\'humidité absolue : ' . $SHA.'');
                 log::add('rosee', 'debug', '└─────────');
+            
+            
+            //test
+            if ($calcul ='rosee_givre') {
+                $this->getrosee();
+                
+              }  
+            
+            
+            
+            
+            
         
         /*  ********************** Calcul de l'humidité absolue *************************** */
 
@@ -570,6 +582,9 @@ class rosee extends eqLogic {
             return;
         }
 }
+public function getrosee() {
+   log::add('rosee', 'debug', '│ Point de Rosée TEST: ' . $rosee_point); 
+ }   
 class roseeCmd extends cmd {
     /*     * *************************Attributs****************************** */
 
