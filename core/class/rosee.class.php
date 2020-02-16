@@ -305,79 +305,19 @@ class rosee extends eqLogic {
                 log::add('rosee', 'debug', '└─────────');
             
             
-            //test
-            if ($calcul ='rosee_givre') {
-                $this->getrosee();
-                
-              }  
-            
+            /*  ********************** Lancement des Modes de CALCUL  ***************************  */ 
+                if ($calcul == 'rosee_givre') {
+                    log::add('rosee', 'debug', '│ Lancement calcul du Point de Rosée');
+                    CalculH();
+                    CalculR();
+                };
+            //
             
             
             
             
         
-        /*  ********************** Calcul de l'humidité absolue *************************** */
-
-            $terme_pvs1 = 2.7877 + (7.625 * $temperature) / (241.6 + $temperature);
-            $pvs = pow(10,$terme_pvs1);                                             // pression de saturation de la vapeur d'eau
-            $pv = ($humidite * $pvs) / 100.0;                                       // pression partielle de vapeur d'eau
-            $pression = $pression * 100.0;                                          // conversion de la pression en Pa
-            $humi_a = 0.622 * ($pv / ($pression - $pv));                            // Humidité absolue en kg d'eau par kg d'air
-            $v = (461.24 * (0.622 + $humi_a) * ($temperature+273.15)) / $pression;  // Volume specifique en m3 / kg
-            $p = 1.0 / $v;                                                          // Poids spécifique en kg / m3
-            $humi_a_m3 = 1000.0 * $humi_a * $p;                                     // Humidité absolue en gr / m3
-            $humi_a_m3 = round(($humi_a_m3), 1);                                    // Humidité absolue en gr / m3 (1 chiffre après la virgule)
-                
-                log::add('rosee', 'debug', '┌───────── CALCUL DE L HUMIDITE ABSOLUE : '.$_eqName);
-                log::add('rosee', 'debug', '│ terme_pvs1 : ' . $terme_pvs1);
-                log::add('rosee', 'debug', '│ pvs : ' . $pvs);
-                log::add('rosee', 'debug', '│ pv : ' . $pv);
-                log::add('rosee', 'debug', '│ Pression : ' . $pression.' Pa');
-                log::add('rosee', 'debug', '│ humi_a : ' . $humi_a);
-                log::add('rosee', 'debug', '│ v : ' . $v);
-                log::add('rosee', 'debug', '│ p : ' . $p);
-                log::add('rosee', 'debug', '│ Humidité Absolue : ' . $humi_a_m3.' g/m3');
-                log::add('rosee', 'debug', '└─────────');
         
-		/* calcul du point de rosee
-			paramètres de MAGNUS pour l'air saturé (entre -45°C et +60°C) :
-			alpha  = 6.112 hPa
-			beta   = 17.62
-			lambda = 243.12 °C
-		*/
-            log::add('rosee', 'debug', '┌───────── CALCUL DU POINT DE ROSEE : '.$_eqName);
-                $alpha = 6.112;
-                    log::add('rosee', 'debug', '│ alpha : ' . $alpha );
-                $beta = 17.62;
-                    log::add('rosee', 'debug', '│ beta : ' . $beta );
-                $lambda = 243.12;
-                    log::add('rosee', 'debug', '│ Lambda : ' . $lambda );
-                $Terme1 = log($humidite/100);
-                    log::add('rosee', 'debug', '│ Terme1 : ' . $Terme1 );
-                $Terme2 = ($beta * $temperature) / ($lambda + $temperature);
-                    log::add('rosee', 'debug', '│ Terme2 : ' . $Terme2 );
-                $rosee = $lambda * ($Terme1 + $Terme2) / ($beta - $Terme1 - $Terme2);
-                    log::add('rosee', 'debug', '│ rosee : ' . $rosee );
-                $rosee_point = round(($rosee), 1);
-        
-            
-            log::add('rosee', 'debug', '│ Point de Rosée : ' . $rosee_point);
-        
-        /*  ********************** Calcul de l'alerte rosée en fonction du seuil d'alerte *************************** */
-            $frost_alert_rosee = $temperature - $rosee_point;
-                log::add('rosee', 'debug', '│ Calcul point de rosée : (Température - point de Rosée) : (' .$temperature .' - '.$rosee_point .' )= ' . $frost_alert_rosee );
-            
-                if ($frost_alert_rosee <= $dpr) {
-                    $alert_r = 1;
-                    log::add('rosee', 'debug', '│ Résultat : Calcul point de rosée (Calcul point de Rosée  <= Seuil DPR) = (' .$frost_alert_rosee .' <= ' .$dpr .')');
-                } else {
-                    $alert_r = 0;
-                    log::add('rosee', 'debug', '│ Résultat : Calcul point de rosée (Calcul point de Rosée  > Seuil DPR)= (' .$frost_alert_rosee .' > ' .$dpr .')');
-                }
-        
-                    log::add('rosee', 'debug', '│ Etat alerte rosée : ' . $alert_r);
-        
-            log::add('rosee', 'debug', '└─────────');
 
         // Pas de calcul si température
             if($temperature <= 5) {
@@ -582,9 +522,70 @@ class rosee extends eqLogic {
             return;
         }
 }
-public function getrosee() {
-   log::add('rosee', 'debug', '│ Point de Rosée TEST: ' . $rosee_point); 
- }   
+
+function CalculH() {
+  /*  ********************** Calcul de l'humidité absolue *************************** */
+        $terme_pvs1 = 2.7877 + (7.625 * $temperature) / (241.6 + $temperature);
+        $pvs = pow(10,$terme_pvs1);                                             // pression de saturation de la vapeur d'eau
+        $pv = ($humidite * $pvs) / 100.0;                                       // pression partielle de vapeur d'eau
+        $pression = $pression * 100.0;                                          // conversion de la pression en Pa
+        $humi_a = 0.622 * ($pv / ($pression - $pv));                            // Humidité absolue en kg d'eau par kg d'air
+        $v = (461.24 * (0.622 + $humi_a) * ($temperature+273.15)) / $pression;  // Volume specifique en m3 / kg
+        $p = 1.0 / $v;                                                          // Poids spécifique en kg / m3
+        $humi_a_m3 = 1000.0 * $humi_a * $p;                                     // Humidité absolue en gr / m3
+        $humi_a_m3 = round(($humi_a_m3), 1);                                    // Humidité absolue en gr / m3 (1 chiffre après la virgule)
+                
+            log::add('rosee', 'debug', '┌───────── CALCUL DE L HUMIDITE ABSOLUE : '.$_eqName);
+            log::add('rosee', 'debug', '│ terme_pvs1 : ' . $terme_pvs1);
+            log::add('rosee', 'debug', '│ pvs : ' . $pvs);
+            log::add('rosee', 'debug', '│ pv : ' . $pv);
+            log::add('rosee', 'debug', '│ Pression : ' . $pression.' Pa');
+            log::add('rosee', 'debug', '│ humi_a : ' . $humi_a);
+            log::add('rosee', 'debug', '│ v : ' . $v);
+            log::add('rosee', 'debug', '│ p : ' . $p);
+            log::add('rosee', 'debug', '│ Humidité Absolue : ' . $humi_a_m3.' g/m3');
+            log::add('rosee', 'debug', '└─────────');  
+}   
+
+function CalculR() {
+    /*  ********************** Calcul du point de rosée ***************************
+			paramètres de MAGNUS pour l'air saturé (entre -45°C et +60°C) :
+			alpha  = 6.112 hPa
+			beta   = 17.62
+			lambda = 243.12 °C*/
+		
+            log::add('rosee', 'debug', '┌───────── CALCUL DU POINT DE ROSEE : '.$_eqName);
+        $alpha = 6.112;
+            log::add('rosee', 'debug', '│ alpha : ' . $alpha );
+        $beta = 17.62;
+            log::add('rosee', 'debug', '│ beta : ' . $beta );
+        $lambda = 243.12;
+            log::add('rosee', 'debug', '│ Lambda : ' . $lambda );
+        $Terme1 = log($humidite/100);
+            log::add('rosee', 'debug', '│ Terme1 : ' . $Terme1 );
+        $Terme2 = ($beta * $temperature) / ($lambda + $temperature);
+            log::add('rosee', 'debug', '│ Terme2 : ' . $Terme2 );
+        $rosee = $lambda * ($Terme1 + $Terme2) / ($beta - $Terme1 - $Terme2);
+            log::add('rosee', 'debug', '│ rosee : ' . $rosee );
+        $rosee_point = round(($rosee), 1);
+            log::add('rosee', 'debug', '│ Point de Rosée : ' . $rosee_point);
+    
+    /*  ********************** Calcul de l'alerte rosée en fonction du seuil d'alerte *************************** */
+        $frost_alert_rosee = $temperature - $rosee_point;
+            log::add('rosee', 'debug', '│ Calcul point de rosée : (Température - point de Rosée) : (' .$temperature .' - '.$rosee_point .' )= ' . $frost_alert_rosee );
+    
+        if ($frost_alert_rosee <= $dpr) {
+            $alert_r = 1;
+            log::add('rosee', 'debug', '│ Résultat : Calcul point de rosée (Calcul point de Rosée  <= Seuil DPR) = (' .$frost_alert_rosee .' <= ' .$dpr .')');
+        } else {
+            $alert_r = 0;
+            log::add('rosee', 'debug', '│ Résultat : Calcul point de rosée (Calcul point de Rosée  > Seuil DPR)= (' .$frost_alert_rosee .' > ' .$dpr .')');
+        }
+    
+            log::add('rosee', 'debug', '│ Etat alerte rosée : ' . $alert_r);
+            log::add('rosee', 'debug', '└─────────');
+}
+
 class roseeCmd extends cmd {
     /*     * *************************Attributs****************************** */
 
