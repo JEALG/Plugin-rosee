@@ -63,7 +63,7 @@ function rosee_update() {
             log::add('rosee', 'error', 'rosee_update ERROR: '.$e);
         }
     
-    message::add('rosee', 'Merci pour la mise à jour de ce plugin, le plugin a été repris par JAG, merci à Claude Metzger pour son boulot');
+    //message::add('rosee', 'Merci pour la mise à jour de ce plugin, le plugin a été repris par JAG, merci à Claude Metzger pour son boulot');
 }
 
 function updateLogicalId($eqLogic, $from, $to) {

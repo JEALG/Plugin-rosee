@@ -14,6 +14,7 @@ En option
 > - Equipement "Pression Atmosphérique" : Pression atmosphérique réelle sur le site. 1013.25 hPa par défaut si non renseignée.
 > - Seuil (°C) : Seuil de déclenchement de l'alerte rosée, 2°C par défaut (dépression du point de rosée T°-Tr°) A ajuster en fonction des observations locales.
 > - Seuil d'hunidité absolue : Seuil humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut.
+> - Offset Température : A ajuster en fonction des observations locales et de la position de la sonde, 0 par défaut.
 
 # Exemple de configuration
 
@@ -77,7 +78,7 @@ Le plugin calcule 4 niveaux d'alerte
 >
 >On peut rechercher les équipements grace au bouton de recherche de l’équipement.
 
-- Le point de givrage est égal à la température
+- Le point de givrage est égal 5°C
 
->La température dépasse 10°C donc le point de givrage n'est plus calculé.
+>La température dépasse 5°C donc le point de givrage n'est plus calculé et sa valeur est fixé à 5.
 >

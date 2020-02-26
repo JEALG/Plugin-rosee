@@ -108,14 +108,15 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<form class="form-horizontal col-sm-10">
 					<fieldset>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" hidden>{{Type de Calcul}}
-                                <sup><i class="fas fa-question-circle" title="{{En cours de développement}}"></i></sup>
+                            <label class="col-sm-2 control-label">{{Type de Calcul}}
+                                <sup><i class="fas fa-question-circle" title="{{Il est possible de se limiter à un seul calcul, Point de Rosée et Point de Givre fait tous les calculs}}"></i></sup>
                             </label>
-                            <div class="col-sm-3" hidden>
-                                <select disabled class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="type_calcul">
-                                    <option value=''>{{Rosée et Givre}}</option>
-                                    <option value='rosee'>{{Rosée}}</option>
-                                    <option value='givre'>{{Givre}}</option>
+                            <div class="col-sm-3">
+                                <select class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="type_calcul">
+                                    <option value=''>{{Point de Rosée et Point de Givre}}</option>
+                                    <option value='givre'>{{Point de Givre}}</option>
+                                    <option value='humidityabs'>{{Humidité absolue}}</option>
+                                    <option value='rosee'>{{Point de Rosée}}</option>
                                 </select>
                             </div>
                         </div>
@@ -130,6 +131,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
 										<a class="btn btn-default listCmdActionOther roundedRight" id="bt_selectTempCmd"><i class="fas fa-list-alt"></i></a>
 									</span>
 								</div>
+							</div>
+						</div>
+                        <div class="form-group">
+							<label class="col-sm-2 control-label">{{Offset Température}}
+								<sup><i class="fas fa-question-circle" title="{{A ajuster en fonction des observations locales et de la position de la sonde, 0 par défaut.}}"></i></sup>
+							</label>
+							<div class="col-md-1">
+                                <input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="OffsetT" placeholder="{{0}}">
 							</div>
 						</div>
 						<div class="form-group">
@@ -167,7 +176,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							</div>
 						</div>
                         <div class="form-group">
-							<label class="col-sm-2 control-label">{{Seuil d'humidité absolue}}
+							<label class="col-sm-2 control-label">{{Seuil d'Humidité Absolue}}
 								<sup><i class="fas fa-question-circle" title="{{Seuil d'humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut.}}"></i></sup>
 							</label>
 							<div class="col-md-1">
