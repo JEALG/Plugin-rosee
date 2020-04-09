@@ -17,6 +17,8 @@ description: Ce plugin permet d'obtenir le point de rosée pour savoir si l'herb
 - Suppression de certains calculs intermédiaires
 - Affectation valeur Min et Max sur le "Message numérique"
 
+>*Info : Penser à sauvegarder chaque équipement
+
 # Version 20200226
 - Le point de givre est égal à 5 si la température dépasse 5°
 - Possibilité de sélectionner uniquement une partie du calcul (Rosée et givre, Humidité absolue, Givre, Point de rosée)
