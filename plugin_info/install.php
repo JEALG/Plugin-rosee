@@ -18,8 +18,8 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-
 function rosee_install() {
+    jeedom::getApiKey('rosee');
     config::save('functionality::cron5::enable', 1, 'rosee');
     config::save('functionality::cron30::enable', 0, 'rosee');
     $cron = cron::byClassAndFunction('rosee', 'pull');
@@ -29,6 +29,7 @@ function rosee_install() {
 }
 
 function rosee_update() {
+    jeedom::getApiKey('rosee');
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1)
         config::save('functionality::cron5::enable', 1, 'rosee');
     
@@ -42,18 +43,17 @@ function rosee_update() {
     
     $plugin = plugin::byId('rosee');
     $eqLogics = eqLogic::byType($plugin->getId());
-    foreach ($eqLogics as $eqLogic)
-    {
-        updateLogicalId($eqLogic, 'Point de rosée', 'rosee_point');
-        updateLogicalId($eqLogic, 'Humidité absolue', 'humidite_absolue');
-    }
+    //foreach ($eqLogics as $eqLogic)
+    //{
+      //  updatename($eqLogic, 'Message Alerte givre', 'Message');
+//		updatename($eqLogic, 'Message Alerte givre numérique', 'Message numérique');
+  //  } 
     
     //resave eqs for new cmd:
         try
         {
             $eqs = eqLogic::byType('rosee');
-            foreach ($eqs as $eq)
-            {
+            foreach ($eqs as $eq){
                 $eq->save();
             }
         }

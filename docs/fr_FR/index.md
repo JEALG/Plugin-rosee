@@ -7,12 +7,12 @@ Pour fonctionner, on doit indiquer un équipement température et un équipement
 
 Le plugin ne comporte pas de configuration générale, il faut ajouter :
 
-> - Equipement "Température"
-> - Equipement "Humidité Relative"
+> - Equipement "Température" (°C)
+> - Equipement "Humidité Relative" (%)
 
 En option
-> - Equipement "Pression Atmosphérique" : Pression atmosphérique réelle sur le site. 1013.25 hPa par défaut si non renseignée.
-> - Seuil (°C) : Seuil de déclenchement de l'alerte rosée, 2°C par défaut (dépression du point de rosée T°-Tr°) A ajuster en fonction des observations locales.
+> - Equipement "Pression Atmosphérique" (hPa): Pression atmosphérique réelle sur le site. 1013.25 hPa par défaut si non renseignée.
+> - Seuil de l'Alerte Rosée (°C) : Seuil de déclenchement de l'alerte rosée, 2°C par défaut (dépression du point de rosée T°-Tr°) A ajuster en fonction des observations locales.
 > - Seuil d'hunidité absolue : Seuil humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut.
 > - Offset Température : A ajuster en fonction des observations locales et de la position de la sonde, 0 par défaut.
 
