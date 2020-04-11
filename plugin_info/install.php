@@ -31,22 +31,19 @@ function rosee_install() {
 
 function rosee_update() {
     jeedom::getApiKey('rosee');
-    //log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
 
     $cron = cron::byClassAndFunction('rosee', 'pull');
     if (is_object($cron)) {
         $cron->remove();
     }
-    //log::add('rosee', 'debug', '│ Suppression Cron');
+
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1) {
         config::save('functionality::cron5::enable', 1, 'rosee');
     }
-    //log::add('rosee', 'debug', '│ Cron5');
 
     if (config::byKey('functionality::cron30::enable', 'rosee', -1) == -1) {
         config::save('functionality::cron30::enable', 0, 'rosee');
     }
-    //log::add('rosee', 'debug', '│ Cron30');
 
     $plugin = plugin::byId('rosee');
     $eqLogics = eqLogic::byType($plugin->getId());
@@ -56,7 +53,6 @@ function rosee_update() {
         updateLogicalId($eqLogic, 'message_givre_num', 'td_num');
     }
 
-    //log::add('rosee', 'debug', '│ TEST');
     //resave eqLogics for new cmd:
     try
     {
@@ -71,7 +67,7 @@ function rosee_update() {
         $e = print_r($e, 1);
         log::add('rosee', 'error', 'rosee_update ERROR: '.$e);
     }
-    //log::add('rosee', 'debug', '└─────────');*/
+
     message::add('rosee', 'Merci pour la mise à jour de ce plugin, consultez le changelog');
 
 }
