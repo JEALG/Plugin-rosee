@@ -182,13 +182,13 @@ class rosee extends eqLogic {
             $roseeCmd->setUnite('°C');
             $roseeCmd->save();
 
-            $roseeCmd = $this->getCmd(null, 'message_givre');
+            $roseeCmd = $this->getCmd(null, 'td');
             if (!is_object($roseeCmd)) {
                 $roseeCmd = new roseeCmd();
                 $roseeCmd->setName(__('Message', __FILE__));
                 $roseeCmd->setEqLogic_id($this->id);
-                $roseeCmd->setLogicalId('message_givre');
-                $roseeCmd->setConfiguration('data', 'message_givre');
+                $roseeCmd->setLogicalId('td');
+                $roseeCmd->setConfiguration('data', 'td');
                 $roseeCmd->setType('info');
                 $roseeCmd->setSubType('string');
                 $roseeCmd->setIsHistorized(0);
@@ -201,13 +201,13 @@ class rosee extends eqLogic {
             $roseeCmd->setUnite('');
             $roseeCmd->save();
 
-            $roseeCmd = $this->getCmd(null, 'message_givre_num');
+            $roseeCmd = $this->getCmd(null, 'td_num');
             if (!is_object($roseeCmd)) {
                 $roseeCmd = new roseeCmd();
                 $roseeCmd->setName(__('Message numérique', __FILE__));
                 $roseeCmd->setEqLogic_id($this->id);
-                $roseeCmd->setLogicalId('message_givre_num');
-                $roseeCmd->setConfiguration('data', 'message_givre_num');
+                $roseeCmd->setLogicalId('td_num');
+                $roseeCmd->setConfiguration('data', 'td_num');
                 $roseeCmd->setType('info');
                 $roseeCmd->setSubType('numeric');
                 $roseeCmd->setIsHistorized(0);
@@ -448,7 +448,7 @@ class rosee extends eqLogic {
                 log::add('rosee', 'debug', '│ │ Point de givrage : ' . $frost_point.' °C');
             }
 
-            $cmd = $this->getCmd('info', 'message_givre'); //Mise à jour de l'équipement message
+            $cmd = $this->getCmd('info', 'td'); //Mise à jour de l'équipement message
             if(is_object($cmd)) {
                 $cmd->setConfiguration('value', $msg_givre);
                 $cmd->save();
@@ -457,7 +457,7 @@ class rosee extends eqLogic {
                 log::add('rosee', 'debug', '│ │ Message Alerte givre : ' . $msg_givre);
             }
 
-            $cmd = $this->getCmd('info', 'message_givre_num'); //Mise à jour de l'équipement message
+            $cmd = $this->getCmd('info', 'td_num'); //Mise à jour de l'équipement message
             if(is_object($cmd)) {
                 $cmd->setConfiguration('value', $msg_givre_num);
                 $cmd->save();
