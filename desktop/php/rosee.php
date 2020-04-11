@@ -12,7 +12,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
         <div class="eqLogicThumbnailContainer">
             <div class="cursor eqLogicAction logoPrimary" data-action="add">
                 <i class="fas fa-plus-circle"></i>
-                <br/>
+                <br />
                 <span>{{Ajouter}}</span>
             </div>
         </div>
@@ -47,7 +47,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
             <div role="tabpanel" class="tab-pane active" id="eqlogictab">
-                <br/>
+                <br />
                 <form class="form-horizontal col-sm-10">
                     <fieldset>
                         <div class="form-group">
@@ -99,7 +99,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         </div>
                     </fieldset>
                 </form>
-                <br/>
+                <br />
 
                 <hr>
 
@@ -188,7 +188,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
             </div>
 
             <div role="tabpanel" class="tab-pane" id="commandtab">
-                <br/>
+                <br />
                 <table id="table_cmd" class="table table-bordered table-condensed">
                     <thead>
                         <tr>
