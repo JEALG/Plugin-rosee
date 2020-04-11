@@ -82,7 +82,6 @@ function rosee_update() {
     }
     log::add('rosee', 'debug', '└─────────');*/
 
-    message::add('rosee', 'Mise à 2jour du plugin Rosee terminee 200.');
 }
 
 function updateLogicalId($eqLogic, $from, $to) {
