@@ -30,7 +30,7 @@ function rosee_install() {
 }
 
 function rosee_update() {
-    message::add('rosee', 'Mise a jour du plugin Rosee terminee.');
+
     /*jeedom::getApiKey('rosee');
     log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
 
@@ -82,7 +82,7 @@ function rosee_update() {
     }
     log::add('rosee', 'debug', '└─────────');*/
 
-message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
+    message::add('rosee', 'Mise a jour du plugin Rosee terminee.');
 }
 
 function updateLogicalId($eqLogic, $from, $to) {
