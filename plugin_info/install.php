@@ -49,6 +49,7 @@ function rosee_update() {
     }
 
     log::add('rosee', 'debug', '│ Cron30');
+     message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
 
     $plugin = plugin::byId('rosee');
     log::add('rosee', 'debug', '│ TEST 1'.$plugin);
