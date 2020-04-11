@@ -30,7 +30,7 @@ function rosee_install() {
 }
 
 function rosee_update() {
-    message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
+    message::add('rosee', 'Mise a jour du plugin Rosee terminee.');
     jeedom::getApiKey('rosee');
     log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
 
@@ -49,7 +49,7 @@ function rosee_update() {
         config::save('functionality::cron30::enable', 0, 'rosee');
     }
 
-    message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
+    //message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
     log::add('rosee', 'debug', '│ Cron30');
 
 
