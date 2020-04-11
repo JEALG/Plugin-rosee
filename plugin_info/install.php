@@ -46,7 +46,6 @@ function rosee_update() {
     if (config::byKey('functionality::cron30::enable', 'rosee', -1) == -1)
         config::save('functionality::cron30::enable', 0, 'rosee');
     log::add('rosee', 'debug', '│ Cron30');
-    $cron = cron::byClassAndFunction('rosee', 'pull');
 
     $plugin = plugin::byId('rosee');
     $eqLogics = eqLogic::byType($plugin->getId());
