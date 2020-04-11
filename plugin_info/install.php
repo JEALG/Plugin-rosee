@@ -38,10 +38,10 @@ function rosee_update() {
         $cron->remove();
     }
     log::add('rosee', 'debug', '│ Suppression Cron');
-    /*if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1) {
+    if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1) {
         config::save('functionality::cron5::enable', 1, 'rosee');
     }
-
+/*
     log::add('rosee', 'debug', '│ Cron5');
 
     if (config::byKey('functionality::cron30::enable', 'rosee', -1) == -1) {
