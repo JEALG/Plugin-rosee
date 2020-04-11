@@ -32,16 +32,16 @@ function rosee_install() {
 function rosee_update() {
     jeedom::getApiKey('rosee');
     log::add('rosee', 'error', 'Test: ');
+    if (is_object($cron)) {
+        $cron->remove();
+    }
+
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1)
         config::save('functionality::cron5::enable', 1, 'rosee');
 
     if (config::byKey('functionality::cron30::enable', 'rosee', -1) == -1)
         config::save('functionality::cron30::enable', 0, 'rosee');
     $cron = cron::byClassAndFunction('rosee', 'pull');
-
-    if (is_object($cron)) {
-        $cron->remove();
-    }
 
     $plugin = plugin::byId('rosee');
     $eqLogics = eqLogic::byType($plugin->getId());
