@@ -30,6 +30,7 @@ function rosee_install() {
 }
 
 function rosee_update() {
+    message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
     jeedom::getApiKey('rosee');
     log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
 
