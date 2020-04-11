@@ -36,13 +36,14 @@ function rosee_update() {
         $cron->remove();
 
     }
-
     log::add('rosee', 'debug', '│ Suppression Cron');
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1)
         config::save('functionality::cron5::enable', 1, 'rosee');
+    log::add('rosee', 'debug', '│ Cron5');
 
     if (config::byKey('functionality::cron30::enable', 'rosee', -1) == -1)
         config::save('functionality::cron30::enable', 0, 'rosee');
+    log::add('rosee', 'debug', '│ Cron30');
     $cron = cron::byClassAndFunction('rosee', 'pull');
 
     $plugin = plugin::byId('rosee');
