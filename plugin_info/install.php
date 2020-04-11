@@ -52,7 +52,7 @@ function rosee_update() {
         updatename($eqLogic, 'message_givre_num', 'td_num');
         //$eqLogics->save();
     }
-
+    log::add('rosee', 'debug', '│ TEST');
     message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
     //resave eqLogics for new cmd:
     try
