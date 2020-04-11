@@ -30,7 +30,7 @@ function rosee_install() {
 }
 
 function rosee_update() {
-
+    message::add('rosee', 'Merci pour la mise à jour de ce plugin, consultez le changelog avant utilisation svp');
     /*jeedom::getApiKey('rosee');
     log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
 
