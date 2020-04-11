@@ -36,7 +36,8 @@ function rosee_update() {
         $cron->remove();
 
     }
-log::add('rosee', 'debug', '│ Suppression Cron');
+
+    log::add('rosee', 'debug', '│ Suppression Cron');
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1)
         config::save('functionality::cron5::enable', 1, 'rosee');
 
@@ -56,10 +57,10 @@ log::add('rosee', 'debug', '│ Suppression Cron');
     //resave eqLogics for new cmd:
     try
     {
-        $eqLogics = eqLogic::byType($plugin->getId());
-        foreach ($eqLogics as $eqLogics)
+        $eqs = eqLogic::byType('rosee');
+        foreach ($eqs as $eq)
         {
-            $eqLogics->save();
+            $eq->save();
         }
     }
     catch (Exception $e)
