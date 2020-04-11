@@ -34,9 +34,9 @@ function rosee_update() {
     log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
     if (is_object($cron)) {
         $cron->remove();
-        log::add('rosee', 'debug', '│ Suppression Cron');
-    }
 
+    }
+log::add('rosee', 'debug', '│ Suppression Cron');
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1)
         config::save('functionality::cron5::enable', 1, 'rosee');
 
