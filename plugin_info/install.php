@@ -49,9 +49,10 @@ function rosee_update() {
 
     $plugin = plugin::byId('rosee');
     $eqLogics = eqLogic::byType($plugin->getId());
-    foreach ($eqLogics as $eqLogic) {
-        updatename($eqLogic, 'message_givre', 'td');
-        updatename($eqLogic, 'message_givre_num', 'td_num');
+    foreach ($eqLogics as $eqLogic)
+    {
+        //updateLogicalId($eqLogic, 'message_givre', 'td');
+        //updateLogicalId($eqLogic, 'message_givre_num', 'td_num');
         //$eqLogics->save();
     }
     log::add('rosee', 'debug', '│ TEST');
