@@ -51,15 +51,15 @@ function rosee_update() {
     log::add('rosee', 'debug', '│ Cron30');
 
     $plugin = plugin::byId('rosee');
-    log::add('rosee', 'debug', '│ TEST 1'. $plugin);
+    log::add('rosee', 'debug', '│ TEST 1'.$plugin);
     $eqLogics = eqLogic::byType($plugin->getId());
     log::add('rosee', 'debug', '│ TEST2' .$eqLogics);
-    foreach ($eqLogics as $eqLogic)
-    {
+    //foreach ($eqLogics as $eqLogic)
+    //{
         //updateLogicalId($eqLogic, 'message_givre', 'td');
         //updateLogicalId($eqLogic, 'message_givre_num', 'td_num');
         //$eqLogics->save();
-    }
+    //}
 
     log::add('rosee', 'debug', '│ TEST');
     message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
