@@ -48,21 +48,15 @@ function rosee_update() {
     }
     //log::add('rosee', 'debug', '│ Cron30');
 
-/*    //message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
-
     $plugin = plugin::byId('rosee');
-    log::add('rosee', 'debug', '│ TEST 1'.$plugin);
     $eqLogics = eqLogic::byType($plugin->getId());
-    log::add('rosee', 'debug', '│ TEST2' .$eqLogics);
-    //foreach ($eqLogics as $eqLogic)
-    //{
-        //updateLogicalId($eqLogic, 'message_givre', 'td');
-        //updateLogicalId($eqLogic, 'message_givre_num', 'td_num');
-        //$eqLogics->save();
-    //}
+    foreach ($eqLogics as $eqLogic)
+    {
+        updateLogicalId($eqLogic, 'message_givre', 'td');
+        updateLogicalId($eqLogic, 'message_givre_num', 'td_num');
+    }
 
-    log::add('rosee', 'debug', '│ TEST');
-    message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
+    //log::add('rosee', 'debug', '│ TEST');
     //resave eqLogics for new cmd:
     try
     {
@@ -77,7 +71,7 @@ function rosee_update() {
         $e = print_r($e, 1);
         log::add('rosee', 'error', 'rosee_update ERROR: '.$e);
     }
-    log::add('rosee', 'debug', '└─────────');*/
+    //log::add('rosee', 'debug', '└─────────');*/
     message::add('rosee', 'Merci pour la mise à jour de ce plugin, consultez le changelog');
 
 }
