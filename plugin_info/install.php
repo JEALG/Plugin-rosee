@@ -30,12 +30,11 @@ function rosee_install() {
 }
 
 function rosee_update() {
-    message::add('rosee', 'Merci pour la mise à jour de ce plugin, consultez le changelog avant utilisation svp');
-    /*jeedom::getApiKey('rosee');
+    jeedom::getApiKey('rosee');
     log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
 
     $cron = cron::byClassAndFunction('rosee', 'pull');
-    if (is_object($cron)) {
+   /* if (is_object($cron)) {
         $cron->remove();
     }
     log::add('rosee', 'debug', '│ Suppression Cron');
@@ -81,6 +80,7 @@ function rosee_update() {
         log::add('rosee', 'error', 'rosee_update ERROR: '.$e);
     }
     log::add('rosee', 'debug', '└─────────');*/
+    message::add('rosee', 'Merci pour la mise à jour de ce plugin, consultez le changelog');
 
 }
 
