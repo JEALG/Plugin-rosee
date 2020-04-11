@@ -31,9 +31,10 @@ function rosee_install() {
 
 function rosee_update() {
     jeedom::getApiKey('rosee');
-    log::add('rosee', 'error', 'Test: ');
+    log::add('rosee', 'debug', '┌───────── Mise à jour Plugin ');
     if (is_object($cron)) {
         $cron->remove();
+        log::add('rosee', 'debug', '│ Suppression Cron ');
     }
 
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1)
@@ -66,7 +67,7 @@ function rosee_update() {
         $e = print_r($e, 1);
         log::add('rosee', 'error', 'rosee_update ERROR: '.$e);
     }
-
+    log::add('rosee', 'debug', '└─────────');
 
 }
 
