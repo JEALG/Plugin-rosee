@@ -45,9 +45,9 @@ function rosee_update() {
     $plugin = plugin::byId('rosee');
     $eqLogics = eqLogic::byType($plugin->getId());
     foreach ($eqLogics as $eqLogic) {
-        //  updatename($eqLogic, 'Message Alerte givre', 'Message');
-        //	updatename($eqLogic, 'Message Alerte givre numérique', 'Message numérique');
-        $eqLogics->save();
+        updatename($eqLogic, 'message_givre', 'td');
+        updatename($eqLogic, 'message_givre_num', 'td_num');
+        //$eqLogics->save();
     }
 
     message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
@@ -55,7 +55,8 @@ function rosee_update() {
     try
     {
         $eqLogics = eqLogic::byType($plugin->getId());
-        foreach ($eqLogics as $eqLogics){
+        foreach ($eqLogics as $eqLogics)
+        {
             $eqLogics->save();
         }
     }
@@ -69,10 +70,11 @@ function rosee_update() {
 }
 
 function updateLogicalId($eqLogic, $from, $to) {
-    $roseeCmd- = $eqLogic->getCmd(null, $from);
-    if (is_object($roseeCmd-)) {
-        $roseeCmd-->setLogicalId($to);
-        $roseeCmd-->save();
+    //  Fonction pour renommer une commande
+    $roseeCmd = $eqLogic->getCmd(null, $from);
+    if (is_object($roseeCmd)) {
+        $roseeCmd->setLogicalId($to);
+        $roseeCmd->save();
     }
 }
 
