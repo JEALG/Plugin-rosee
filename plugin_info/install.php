@@ -31,6 +31,7 @@ function rosee_install() {
 
 function rosee_update() {
     jeedom::getApiKey('rosee');
+    log::add('rosee', 'error', 'Test: ');
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1)
         config::save('functionality::cron5::enable', 1, 'rosee');
 
