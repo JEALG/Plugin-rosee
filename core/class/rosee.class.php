@@ -476,27 +476,7 @@ class rosee extends eqLogic {
             //log::add('rosee', 'debug', '│ │ Suppression : ' );
             // };
         };
-        if ($calcul=='td' ) {
-            $cmd = $this->getCmd('info', 'tendance');//Mise à jour de l'équipement tendance
-            if(is_object($cmd)) {
-                $cmd->setConfiguration('value', $td);
-                $cmd->save();
-                $cmd->event($td);
-                log::add('rosee', 'debug', '│ Tendance : ' . $td);
-            }
 
-            $cmd = $this->getCmd('info', 'tendance_num'); //Mise à jour de l'équipement message
-            if(is_object($cmd)) {
-                $cmd->setConfiguration('value', $td_num);
-                $cmd->save();
-                $cmd->setCollectDate('');
-                $cmd->event($td_num);
-                log::add('rosee', 'debug', '│ Tendance Numérique : ' . $td_num);
-            };
-            log::add('rosee', 'debug', '│ └─────────');
-        } else{
-
-        };
         log::add('rosee', 'debug', '└─────────');
         log::add('rosee', 'debug', '================ FIN CRON =================');
         return;
