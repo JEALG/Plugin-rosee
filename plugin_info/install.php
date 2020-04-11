@@ -49,7 +49,8 @@ function rosee_update() {
         //	updatename($eqLogic, 'Message Alerte givre numérique', 'Message numérique');
         $eqLogics->save();
     }
-message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
+
+    message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
     //resave eqLogics for new cmd:
     try
     {
