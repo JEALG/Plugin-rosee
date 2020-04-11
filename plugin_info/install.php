@@ -31,26 +31,24 @@ function rosee_install() {
 
 function rosee_update() {
     jeedom::getApiKey('rosee');
-    log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
+    //log::add('rosee', 'debug', '┌───────── Mise à jour Plugin');
 
     $cron = cron::byClassAndFunction('rosee', 'pull');
     if (is_object($cron)) {
         $cron->remove();
     }
-    log::add('rosee', 'debug', '│ Suppression Cron');
+    //log::add('rosee', 'debug', '│ Suppression Cron');
     if (config::byKey('functionality::cron5::enable', 'rosee', -1) == -1) {
         config::save('functionality::cron5::enable', 1, 'rosee');
     }
-/*
-    log::add('rosee', 'debug', '│ Cron5');
+    //log::add('rosee', 'debug', '│ Cron5');
 
     if (config::byKey('functionality::cron30::enable', 'rosee', -1) == -1) {
         config::save('functionality::cron30::enable', 0, 'rosee');
     }
+    //log::add('rosee', 'debug', '│ Cron30');
 
-    //message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
-    log::add('rosee', 'debug', '│ Cron30');
-
+/*    //message::add('rosee', 'Mise à jour du plugin Rosée terminée.');
 
     $plugin = plugin::byId('rosee');
     log::add('rosee', 'debug', '│ TEST 1'.$plugin);
