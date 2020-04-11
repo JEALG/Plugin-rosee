@@ -82,7 +82,7 @@ function rosee_update() {
     }
     log::add('rosee', 'debug', '└─────────');*/
 
-    message::add('rosee', 'Mise a jour du plugin Rosee terminee.');
+    message::add('rosee', 'Mise à jour du plugin Rosee terminee 2.');
 }
 
 function updateLogicalId($eqLogic, $from, $to) {
