@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -19,11 +18,26 @@
 try {
     require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
-    
+
     if (!isConnect('admin')) {
         throw new Exception(__('401 - {{Accès non autorisé}}', __FILE__));
     }
-    
+
+    if (init('action') == 'getRosee') {
+        $rosee = rosee::byId(init('id'));
+        if (!is_object($rosee)) {
+            throw new Exception(__('Plugin inconnu verifier l\'id', __FILE__));
+        }
+        $return = utils::o2a($rosee);
+        $return['cmd'] = array();
+        foreach ($rosee->getCmd() as $cmd) {
+            $cmd_info = utils::o2a($cmd);
+            $cmd_info['value'] = $cmd->execCmd(null, 0);
+            $return['cmd'][] = $cmd_info;
+        }
+        ajax::success($return);
+     }
+
     if (init('action') == 'autoDEL_eq') {
         $eqLogic = rosee::byId(init('id'));
         if (!is_object($eqLogic)) {
@@ -35,7 +49,7 @@ try {
         }
         ajax::success();
     }
-    
+
     throw new Exception(__('{{Aucune méthode correspondante à}} : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {

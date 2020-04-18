@@ -55,6 +55,14 @@ $("#table_cmd").sortable({
     forcePlaceholderSize: true
 });
 
+$('.eqLogicAttr[data-l1key=configuration][data-l2key=type_calcul]').on('change', function () {
+    if ($(this).value() == 'tendance') {
+        $('#img_device').attr("src", 'plugins/rosee/core/config/img/' + $(this).value() + '.png');
+    } else {
+        $('#img_device').attr("src", 'plugins/rosee/plugin_info/rosee_icon.png');
+    }
+});
+
 $('#bt_autoDEL_eq').on('click', function () {
     var dialog_title = '{{Recréer les commandes}}';
     var dialog_message = '<form class="form-horizontal onsubmit="return false;">';
@@ -150,6 +158,14 @@ $('#type_calcul').change(function () {
         $('#pressure').show();
         $('#DPR').hide();
         $('#SHA').show();
+    }
+    if ((text == 'tendance')) {
+        $('#temperature').hide();
+        $('#temperature_offset').hide();
+        $('#humidite').hide();
+        $('#pressure').show();
+        $('#DPR').hide();
+        $('#SHA').hide();
     }
 });
 

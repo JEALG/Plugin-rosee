@@ -2,7 +2,7 @@
 if (!isConnect('admin')) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
-$plugin = plugin::byId('rosee');
+$plugin = plugin::byId('rosee'); // Obtenir l'identifiant du plugin
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
@@ -12,21 +12,50 @@ $eqLogics = eqLogic::byType($plugin->getId());
         <div class="eqLogicThumbnailContainer">
             <div class="cursor eqLogicAction logoPrimary" data-action="add">
                 <i class="fas fa-plus-circle"></i>
-                <br/>
+                <br />
                 <span>{{Ajouter}}</span>
             </div>
+            <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
+                <i class="fas fa-wrench"></i><br>
+                <span>{{Configuration}}</span>
+            </div>
         </div>
-        <legend><i class="fas fa-umbrella"></i> {{Mes Points de Rosée}}</legend>
         <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
+        <legend><i class="fas fa-umbrella"></i> <i class="icon jeedomapp-weather"></i> {{Mes Points de Rosée, de Givre}}</legend>
         <div class="eqLogicThumbnailContainer">
             <?php
 			foreach ($eqLogics as $eqLogic) {
 				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
-				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '" >';
-				echo '<img src="' . $plugin->getPathImgIcon() . '" />';
-				echo '<br>';
-				echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
-				echo '</div>';
+                if ($eqLogic->getConfiguration('type_calcul') != 'tendance'){
+                    echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '" >';
+                    if ($eqLogic->getConfiguration('type_calcul') == 'tendance') {
+                        echo '<img src="' . $eqLogic->getImage() . '"/>';
+                    } else {
+                        echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
+                    }
+                    echo '<br>';
+                    echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
+                    echo '</div>';
+                }
+			}
+			?>
+        </div>
+        <legend><i class="fas fa-chart-bar"></i> {{Mes Tendances}}</legend>
+        <div class="eqLogicThumbnailContainer">
+            <?php
+			foreach ($eqLogics as $eqLogic) {
+                $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+                if ($eqLogic->getConfiguration('type_calcul') == 'tendance'){
+                    echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '" >';
+                    if ($eqLogic->getConfiguration('type_calcul') == 'tendance') {
+                        echo '<img src="' . $eqLogic->getImage() . '"/>';
+                    } else {
+                        echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
+                    }
+                    echo '<br>';
+                    echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
+                    echo '</div>';
+                }
 			}
 			?>
         </div>
@@ -47,7 +76,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
             <div role="tabpanel" class="tab-pane active" id="eqlogictab">
-                <br/>
+                <br />
                 <form class="form-horizontal col-sm-10">
                     <fieldset>
                         <div class="form-group">
@@ -95,11 +124,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 <form class="form-horizontal col-sm-2">
                     <fieldset>
                         <div class="form-group">
-                            <img src="<?php echo $plugin->getPathImgIcon(); ?>" style="width:120px;" />
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <img src="core/img/no_image.gif" data-original=".png" id="img_device" style="width:120px;" />
+                            </div>
                         </div>
                     </fieldset>
                 </form>
-                <br/>
+                <br />
 
                 <hr>
 
@@ -113,10 +145,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <div class="col-sm-3">
                                 <select id="type_calcul" class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="type_calcul">
                                     <option value=''>{{Aucun}}</option>
-                                    <option value='rosee_givre'>{{Point de Rosée et Point de Givre}}</option>
-                                    <option value='givre'>{{Point de Givre}}</option>
                                     <option value='humidityabs'>{{Humidité absolue}}</option>
+                                    <option value='givre'>{{Point de Givre}}</option>
                                     <option value='rosee'>{{Point de Rosée}}</option>
+                                    <option value='rosee_givre'>{{Point de Rosée et Point de Givre}}</option>
+                                    <option value='tendance'>{{Tendance Météo}}</option>
                                 </select>
                             </div>
                         </div>
@@ -188,7 +221,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
             </div>
 
             <div role="tabpanel" class="tab-pane" id="commandtab">
-                <br/>
+                <br />
                 <table id="table_cmd" class="table table-bordered table-condensed">
                     <thead>
                         <tr>

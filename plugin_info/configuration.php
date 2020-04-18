@@ -29,11 +29,38 @@ if (!isConnect()) {
     })
 
     $("input[data-l1key='functionality::cron5::enable']").on('change', function() {
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron10::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron15::enable']").prop("checked", false)
         if ($(this).is(':checked')) $("input[data-l1key='functionality::cron30::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cronHourly::enable']").prop("checked", false)
+    });
+
+    $("input[data-l1key='functionality::cron10::enable']").on('change', function() {
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron5::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron15::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron30::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cronHourly::enable']").prop("checked", false)
+    });
+
+    $("input[data-l1key='functionality::cron15::enable']").on('change', function() {
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron5::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron10::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron30::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cronHourly::enable']").prop("checked", false)
     });
 
     $("input[data-l1key='functionality::cron30::enable']").on('change', function() {
         if ($(this).is(':checked')) $("input[data-l1key='functionality::cron5::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron10::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron15::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cronHourly::enable']").prop("checked", false)
+    });
+
+    $("input[data-l1key='functionality::cronHourly::enable']").on('change', function() {
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron5::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron10::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron15::enable']").prop("checked", false)
+        if ($(this).is(':checked')) $("input[data-l1key='functionality::cron30::enable']").prop("checked", false)
     });
 
 </script>
