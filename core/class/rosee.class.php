@@ -146,6 +146,8 @@ class rosee extends eqLogic {
                 $roseeCmd->setIsHistorized(0);
                 $roseeCmd->setIsVisible(1);
                 $roseeCmd->setDisplay('generic_type','WEATHER_HUMIDITY');
+                $roseeCmd->setTemplate('dashboard','core::line');
+                $roseeCmd->setTemplate('mobile','core::line');
                 $roseeCmd->setOrder($order);
                 $order ++;
             }
@@ -193,6 +195,8 @@ class rosee extends eqLogic {
                 $roseeCmd->setIsHistorized(0);
                 $roseeCmd->setIsVisible(1);
                 $roseeCmd->setDisplay('generic_type','GENERIC_INFO');
+                $roseeCmd->setTemplate('dashboard','core::line');
+                $roseeCmd->setTemplate('mobile','core::line');
                 $roseeCmd->setOrder($order);
                 $order ++;
             }
@@ -281,6 +285,9 @@ class rosee extends eqLogic {
                 if ($calcul=='tendance') {
                     $roseeCmd->setTemplate('dashboard','rosee::tendance');
                     $roseeCmd->setTemplate('mobile','rosee::tendance');
+                } else {
+                    $roseeCmd->setTemplate('dashboard','core::line');
+                    $roseeCmd->setTemplate('mobile','core::line');
                 }
                 $roseeCmd->setOrder($order);
                 $order ++;

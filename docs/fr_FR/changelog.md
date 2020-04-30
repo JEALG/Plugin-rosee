@@ -11,6 +11,9 @@ Ce plugin permet d'obtenir le point de rosée pour savoir si l'herbe sera mouill
 # Info
 >*Important : en cas de mise à jour disponible pour laquelle il n’y a pas d’information dans cette section, c’est qu’elle n’intègre aucune nouveauté majeure. Cela peut être un ajout de documentation, une correction de documentation, des traductions ou bien de la correction de bugs mineurs.*
 
+# Version 20200430
+- Correction ajout widget core par défaut sur les nouveaux équipements
+
 # Version 20200418
 - Ajout calcul "Tendance Météo"
 - Nettoyage log
@@ -19,7 +22,7 @@ Ce plugin permet d'obtenir le point de rosée pour savoir si l'herbe sera mouill
 - Ajout Cron 10/15/Heures
 - Remplacement Cron5 par Cron30 (les calculs se feront par défaut toutes les 30 minutes)
 >*Info : Penser à vérifier que le cron 30 est actif si non il faut l'activer
-- Ajout widget core pour les commandes sauf pour tendance (uniquement pour les nouveaux équipements)
+- Ajout widget core pour les commandes (uniquement pour les nouveaux équipements)
 - Ajout widget pour la tendance (uniquement pour le Core V4 et les nouveaux équipements)
 
 # Version 20200409
