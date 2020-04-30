@@ -87,6 +87,7 @@ Le plugin calcule 6 niveaux d'information :
     >- Tendance numérique : 5
 
 Le plugin affecte par défaut un widget (uniquement pour le core V4) :<br/>
+
 ![Visu Tendance](../images/visu_tendance.png)
 
 # FAQ
