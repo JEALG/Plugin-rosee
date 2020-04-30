@@ -145,13 +145,11 @@ Le plugin affecte par défaut un widget (uniquement pour le Core V4) :<br/>
 - Je n'ai pas d'informations qui remontent
 
 >Il faut bien indiquer les équipements nécessaires pour les différents calculs
->
 >On peut rechercher les équipements grâce au bouton de recherche de l’équipement.
 
 - Le point de givrage est égal 5°C
 
 >La température dépasse 5°C donc le point de givrage n'est plus calculé et sa valeur est fixé à 5.
-
 
 - Le calcul de la tendance ne se fait pas
 
