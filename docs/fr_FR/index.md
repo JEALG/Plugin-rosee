@@ -155,3 +155,6 @@ Le plugin affecte par défaut un widget (uniquement pour le Core V4) :<br/>
 
 >Il faut attendre 4h pour avoir des résultats corrects lors de la création de l'équipement.
 >L'équipement doit être avoir l'historique d'activé pour fonctionner.
+
+# Changelog
+[changelog](https://jealg.github.io/plugin-rosee/#language#/changelog.html)
