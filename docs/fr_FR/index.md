@@ -144,7 +144,7 @@ Le plugin affecte par défaut un widget (uniquement pour le Core V4) :<br/>
 
 - Je n'ai pas d'informations qui remontent
 
->Il faut bien indiquer les équipements nécessaires pour les différents calculs
+>Il faut bien indiquer les équipements nécessaires pour les différents calculs.<br/>
 >On peut rechercher les équipements grâce au bouton de recherche de l’équipement.
 
 - Le point de givrage est égal 5°C
