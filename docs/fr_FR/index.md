@@ -22,13 +22,13 @@ Le plugin ne comporte pas de configuration générale, il faut :
     - Tendance Météo
 
 >- Renseigner les champs obligatoire suivant la méthode de calcul :
-    - Equipement "Température" (°C)
-    - Equipement "Humidité Relative" (%)
-    - Equipement "Pression Atmosphérique" (hPa) : Ce champs est obligatoire pour la méthode de calcul "Tendance Météo" et il doit être avoir l'historique d'activé. Pour les autres calculs, la valeur est fixé à 1013.25 hPa si non renseignée
+    - Équipement "Température" (°C)
+    - Équipement "Humidité Relative" (%)
+    - Équipement "Pression Atmosphérique" (hPa) : Ce champs est obligatoire pour la méthode de calcul "Tendance Météo" et il doit être avoir l'historique d'activé. Pour les autres calculs, la valeur est fixée à 1013.25 hPa si non renseignée
 
 <b>En option</b>
 > - Seuil de l'Alerte Rosée (°C) : Seuil de déclenchement de l'alerte rosée, 2°C par défaut (dépression du point de rosée T°-Tr°) A ajuster en fonction des observations locales.
-> - Seuil d'hunidité absolue : Seuil humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut.
+> - Seuil d'humidité absolue : Seuil humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut.
 > - Offset Température : A ajuster en fonction des observations locales et de la position de la sonde, 0 par défaut.
 
 # Alerte Givre
@@ -86,7 +86,7 @@ Le plugin calcule 6 niveaux d'information :
     >- Tendance : Forte embellie, instable
     >- Tendance numérique : 5
 
-Le plugin affecte par défaut un widget (uniquement pour le core V4) :<br/>
+Le plugin affecte par défaut un widget (uniquement pour le Core V4) :<br/>
 
 ![Visu Tendance](../images/visu_tendance.png)
 
@@ -105,7 +105,7 @@ Le plugin affecte par défaut un widget (uniquement pour le core V4) :<br/>
 
 -   Et le point de givrage ?
 
->Le point de givrage, connu également comme la température du point givrage ou le point de gelée, est une donnée météorologique calculée à partir de l'humidité, la pression et la température. Le point de givrage de l'air est la température à laquelle, tout en gardant inchangées les conditions barométriques courantes, l'air devient saturé de vapeur d'eau par rapport à la glace. Le point de givrage est donc l'équivalent du point de rosée pour la condensation de la vapeur d'eau directement en cristaux de glace et non en micro-gouttelettes. C'est le phénomène de déposition, qui survient lorsque le point de givre est atteint, qui créé la gelée blanche.
+>Le point de givrage, connu également comme la température du point givrage ou le point de gelée, est une donnée météorologique calculée à partir de l'humidité, la pression et la température. Le point de givrage de l'air est la température à laquelle, tout en gardant inchangées les conditions barométriques courantes, l'air devient saturé de vapeur d'eau par rapport à la glace. Le point de givrage est donc l'équivalent du point de rosée pour la condensation de la vapeur d'eau directement en cristaux de glace et non en microgouttelettes. C'est le phénomène de déposition, qui survient lorsque le point de givre est atteint, qui créé la gelée blanche.
 >
 >Le point de givrage n'est donc défini que sous le point de congélation. Il coexiste avec le point de rosée à ces températures mais comme la pression de vapeur saturante par rapport à la glace est plus faible, le point de givrage est atteint plus rapidement. La capacité hygrométrique détermine les phénomènes de saturation, plus il fait froid, moins l'air peut contenir d'humidité (humidité absolue) et les deux se rejoignent à zéro degré Celsius.
 (Source Wikipédia)
@@ -144,16 +144,16 @@ Le plugin affecte par défaut un widget (uniquement pour le core V4) :<br/>
 
 - Je n'ai pas d'informations qui remontent
 
->Il faut bien indiquer les équipements necessaires pour les différents calculs
+>Il faut bien indiquer les équipements nécessaires pour les différents calculs
 >
->On peut rechercher les équipements grace au bouton de recherche de l’équipement.
+>On peut rechercher les équipements grâce au bouton de recherche de l’équipement.
 
 - Le point de givrage est égal 5°C
 
 >La température dépasse 5°C donc le point de givrage n'est plus calculé et sa valeur est fixé à 5.
->
+
 
 - Le calcul de la tendance ne se fait pas
 
->Il faut attendre 4h pour avoir des résultats corrects lors de la création de l'équipement
->L'équipement doit être aussi historisé pour pouvoir fonctionner
+>Il faut attendre 4h pour avoir des résultats corrects lors de la création de l'équipement.
+>L'équipement doit être avoir l'historique d'activé pour fonctionner.
