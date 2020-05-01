@@ -4,12 +4,13 @@ lang: fr_FR
 title: Jeedom | Plugin Rosee Changelog
 ---
 
-# Description
+# Info
+## Description
 Ce plugin permet d'obtenir le point de rosée pour savoir si l'herbe sera mouillée le matin, ou bien en hiver desavoir s'il va falloir gratter le pare-brise. Pour fonctionner, on doit indiquer sélectionner un équipement de température, d'humidité et de pression (extérieures, bien-sûr…)
 
 [Documentation](https://jealg.github.io/plugin-rosee/#language#/)
 
-# Info
+## Info sur les mises à jour
 >*Important : en cas de mise à jour disponible pour laquelle il n’y a pas d’information dans cette section, c’est qu’elle n’intègre aucune nouveauté majeure. Cela peut être un ajout de documentation, une correction de documentation, des traductions ou bien de la correction de bugs mineurs.*
 
 # Version 20200430
