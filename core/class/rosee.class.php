@@ -77,6 +77,7 @@ class rosee extends eqLogic {
         $return = array('info' => array('numeric' => array()));
         $return['info']['numeric']['tendance'] = array(
             'template' => 'tmplmultistate',
+            'replace' => array('#_desktop_width_#' => '40'),
             'test' => array(
                 array('operation' => '#value# == 0','state_light' => '<img src=plugins/rosee/core/template/img/tendance_0.png>'),
                 array('operation' => '#value# == 1','state_light' => '<img src=plugins/rosee/core/template/img/tendance_1.png>'),
@@ -108,6 +109,7 @@ class rosee extends eqLogic {
             log::add('rosee', 'error', '│ Configuration : Méthode de Calcul inexistant : ' . $this->getConfiguration('type_calcul'));
         }
     }
+
     public function getImage() {
     if($this->getConfiguration('type_calcul') != ''){
       $filename = 'plugins/rosee/core/config/img/' . $this->getConfiguration('type_calcul').'.png';
@@ -123,8 +125,10 @@ class rosee extends eqLogic {
     }
 
     public function postSave(){
-        log::add('rosee', 'debug', 'postSave()');
+        $_eqName = $this->getName();
+        log::add('rosee', 'debug', 'postSave() =>'.$_eqName);
         $order = 1;
+
         /*  ********************** Calcul *************************** */
         $calcul=$this->getConfiguration('type_calcul');
         if ($calcul=='tendance') {
@@ -315,9 +319,7 @@ class rosee extends eqLogic {
 
     /*  **********************Getteur Setteur*************************** */
     public function postUpdate() {
-        foreach (eqLogic::byType('rosee') as $rosee) {
-            $rosee->getInformations();
-        }
+        $this->getInformations();
     }
 
     public function getInformations() {
@@ -776,7 +778,9 @@ class roseeCmd extends cmd {
 
     public function execute($_options = null) {
         if ($this->getLogicalId() == 'refresh') {
+            log::add('rosee', 'debug', ' ─────────> ACTUALISATION MANUELLE');
             $this->getEqLogic()->getInformations();
+            log::add('rosee', 'debug', ' ─────────> FIN ACTUALISATION MANUELLE');
             return;
         }
     }

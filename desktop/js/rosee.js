@@ -64,57 +64,104 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=type_calcul]').on('change',
 });
 
 $('#bt_autoDEL_eq').on('click', function () {
-    var dialog_title = '{{Recréer les commandes}}';
-    var dialog_message = '<form class="form-horizontal onsubmit="return false;">';
-    dialog_title = '{{Recréer les commandes}}';
-    dialog_message += '<label class="lbl lbl-warning" for="name">{{Attention, cela va supprimer les commandes existantes.}}</label> ';
-    dialog_message += '</form>';
-    bootbox.dialog({
-        title: dialog_title,
-        message: dialog_message,
-        buttons: {
-            "{{Annuler}}": {
-                className: "btn-danger",
-                callback: function () {}
-            },
-            success: {
-                label: "{{Démarrer}}",
-                className: "btn-success",
-                callback: function () {
-                    bootbox.confirm('{{Etes-vous sûr de vouloir récréer toutes les commandes ? Cela va supprimer les commandes existantes}}', function (result) {
-                        if (result) {
-                            $.ajax({
-                                type: "POST",
-                                url: "plugins/rosee/core/ajax/rosee.ajax.php",
-                                data: {
-                                    action: "autoDEL_eq",
-                                    id: $('.eqLogicAttr[data-l1key=id]').value(),
-                                },
-                                dataType: 'json',
-                                error: function (request, status, error) {
-                                    handleAjaxError(request, status, error);
-                                },
-                                success: function (data) {
-                                    if (data.state != 'ok') {
-                                        $('#div_alert').showAlert({
-                                            message: data.result,
-                                            level: 'danger'
-                                        });
-                                        return;
-                                    }
-                                    $('#div_alert').showAlert({
-                                        message: '{{Opération réalisée avec succès}}',
-                                        level: 'success'
-                                    });
-                                    $('.eqLogicDisplayCard[data-eqLogic_id=' + $('.eqLogicAttr[data-l1key=id]').value() + ']').click();
-                                }
-                            });
-                        }
+
+     $('#md_modal').dialog({title: "{{Recréer les commandes}}"});
+    $('#md_modal').load('index.php?v=d&plugin=mobile&modal=piece').dialog('open');
+
+
+    bootbox.confirm('{{Êtes-vous sûr de vouloir recréer les commandes ?}}', function (result) {
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "plugins/rosee/core/ajax/rosee.ajax.php",
+                data: {
+                    action: "autoDEL_eq",
+                    id: $('.eqLogicAttr[data-l1key=id]').value(),
+                },
+                dataType: 'json',
+                error: function (request, status, error) {
+                    handleAjaxError(request, status, error);
+                },
+                success: function (data) {
+                    if (data.state != 'ok') {
+                        $('#div_alert').showAlert({
+                            message: data.result,
+                            level: 'danger'
+                        });
+                        return;
+                    }
+                    $('#div_alert').showAlert({
+                        message: '{{Opération réalisée avec succès}}',
+                        level: 'success'
                     });
+                    $('.eqLogicDisplayCard[data-eqLogic_id=' + $('.eqLogicAttr[data-l1key=id]').value() + ']').click();
                 }
-            },
+            });
+
+
+        } else {
+
         }
     });
+
+
+    /*bootbox.confirm('{{Êtes-vous sûr de vouloir recréer les commandes ?}} ', function (result) {
+
+        } else {
+
+        }
+    });
+
+
+
+var dialog_title = '{{Recréer les commandes}}';
+var dialog_message = '<form class="form-horizontal onsubmit="return false;">'; dialog_title = '{{Recréer les commandes}}'; dialog_message += '<label class="lbl lbl-warning" for="name" style="color:red;">{{Attention, cela va supprimer les commandes existantes.}}</label> '; dialog_message += '</form>'; bootbox.dialog({
+    title: dialog_title,
+    message: dialog_message,
+    buttons: {
+        "<i class='fas fa-times'> {{Annuler}}": {
+            className: "btn btn-warning",
+            type: "button",
+            callback: function () {}
+        },
+        success: {
+            label: "<i class='fas fa-check-circle'> {{Ok}}",
+            className: "btn bootbox-accept",
+            callback: function () {
+                bootbox.confirm('{{Etes-vous sûr de vouloir récréer toutes les commandes ? Cela va supprimer les commandes existantes}}', function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: "POST",
+                            url: "plugins/rosee/core/ajax/rosee.ajax.php",
+                            data: {
+                                action: "autoDEL_eq",
+                                id: $('.eqLogicAttr[data-l1key=id]').value(),
+                            },
+                            dataType: 'json',
+                            error: function (request, status, error) {
+                                handleAjaxError(request, status, error);
+                            },
+                            success: function (data) {
+                                if (data.state != 'ok') {
+                                    $('#div_alert').showAlert({
+                                        message: data.result,
+                                        level: 'danger'
+                                    });
+                                    return;
+                                }
+                                $('#div_alert').showAlert({
+                                    message: '{{Opération réalisée avec succès}}',
+                                    level: 'success'
+                                });
+                                $('.eqLogicDisplayCard[data-eqLogic_id=' + $('.eqLogicAttr[data-l1key=id]').value() + ']').click();
+                            }
+                        });
+                    }
+                });
+            }
+        },
+    }
+});*/
 });
 
 $('#type_calcul').change(function () {
