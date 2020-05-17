@@ -101,26 +101,15 @@ class rosee extends eqLogic {
         }
     }
 
-    public function preUpdate() {
-        if (!$this->getIsEnable()) return;
+    public function preInsert() {
 
-        if ($this->getConfiguration('type_calcul') == '') {
-            throw new Exception(__('Le champ "Calcul" ne peut être vide',__FILE__));
-            log::add('rosee', 'error', '│ Configuration : Méthode de Calcul inexistant : ' . $this->getConfiguration('type_calcul'));
-        }
     }
-
-    public function getImage() {
-    if($this->getConfiguration('type_calcul') != ''){
-      $filename = 'plugins/rosee/core/config/img/' . $this->getConfiguration('type_calcul').'.png';
-      if(file_exists(__DIR__.'/../../../../'.$filename)){
-        return $filename;
-      }
-    }
-    return 'plugins/rosee/plugin_info/rosee_icon.png';
-  }
 
     public function postInsert() {
+
+    }
+
+    public function preSave() {
 
     }
 
@@ -317,11 +306,38 @@ class rosee extends eqLogic {
         $refresh->save();
     }
 
-    /*  **********************Getteur Setteur*************************** */
+    public function preUpdate() {
+        if (!$this->getIsEnable()) return;
+
+        if ($this->getConfiguration('type_calcul') == '') {
+            throw new Exception(__('Le champ "Calcul" ne peut être vide',__FILE__));
+            log::add('rosee', 'error', '│ Configuration : Méthode de Calcul inexistant : ' . $this->getConfiguration('type_calcul'));
+        }
+    }
+
     public function postUpdate() {
         $this->getInformations();
     }
 
+    public function preRemove() {
+
+    }
+
+    public function postRemove() {
+
+    }
+
+    public function getImage() {
+    if($this->getConfiguration('type_calcul') != ''){
+      $filename = 'plugins/rosee/core/config/img/' . $this->getConfiguration('type_calcul').'.png';
+      if(file_exists(__DIR__.'/../../../../'.$filename)){
+        return $filename;
+      }
+    }
+    return 'plugins/rosee/plugin_info/rosee_icon.png';
+  }
+
+    /*  **********************Getteur Setteur*************************** */
     public function getInformations() {
         if (!$this->getIsEnable()) return;
 
