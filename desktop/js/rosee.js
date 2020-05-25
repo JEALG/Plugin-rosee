@@ -64,155 +64,104 @@ $('.eqLogicAttr[data-l1key=configuration][data-l2key=type_calcul]').on('change',
 });
 
 $('#bt_autoDEL_eq').on('click', function () {
-
-     $('#md_modal').dialog({title: "{{Recréer les commandes}}"});
-    $('#md_modal').load('index.php?v=d&plugin=mobile&modal=piece').dialog('open');
-
-
-    bootbox.confirm('{{Êtes-vous sûr de vouloir recréer les commandes ?}}', function (result) {
-        if (result) {
-            $.ajax({
-                type: "POST",
-                url: "plugins/rosee/core/ajax/rosee.ajax.php",
-                data: {
-                    action: "autoDEL_eq",
-                    id: $('.eqLogicAttr[data-l1key=id]').value(),
-                },
-                dataType: 'json',
-                error: function (request, status, error) {
-                    handleAjaxError(request, status, error);
-                },
-                success: function (data) {
-                    if (data.state != 'ok') {
-                        $('#div_alert').showAlert({
-                            message: data.result,
-                            level: 'danger'
-                        });
-                        return;
-                    }
-                    $('#div_alert').showAlert({
-                        message: '{{Opération réalisée avec succès}}',
-                        level: 'success'
-                    });
-                    $('.eqLogicDisplayCard[data-eqLogic_id=' + $('.eqLogicAttr[data-l1key=id]').value() + ']').click();
-                }
-            });
-
-
-        } else {
-
-        }
-    });
-
-
-    /*bootbox.confirm('{{Êtes-vous sûr de vouloir recréer les commandes ?}} ', function (result) {
-
-        } else {
-
-        }
-    });
-
-
-
-var dialog_title = '{{Recréer les commandes}}';
-var dialog_message = '<form class="form-horizontal onsubmit="return false;">'; dialog_title = '{{Recréer les commandes}}'; dialog_message += '<label class="lbl lbl-warning" for="name" style="color:red;">{{Attention, cela va supprimer les commandes existantes.}}</label> '; dialog_message += '</form>'; bootbox.dialog({
-    title: dialog_title,
-    message: dialog_message,
-    buttons: {
-        "<i class='fas fa-times'> {{Annuler}}": {
-            className: "btn btn-warning",
-            type: "button",
-            callback: function () {}
-        },
-        success: {
-            label: "<i class='fas fa-check-circle'> {{Ok}}",
-            className: "btn bootbox-accept",
-            callback: function () {
-                bootbox.confirm('{{Etes-vous sûr de vouloir récréer toutes les commandes ? Cela va supprimer les commandes existantes}}', function (result) {
-                    if (result) {
-                        $.ajax({
-                            type: "POST",
-                            url: "plugins/rosee/core/ajax/rosee.ajax.php",
-                            data: {
-                                action: "autoDEL_eq",
-                                id: $('.eqLogicAttr[data-l1key=id]').value(),
-                            },
-                            dataType: 'json',
-                            error: function (request, status, error) {
-                                handleAjaxError(request, status, error);
-                            },
-                            success: function (data) {
-                                if (data.state != 'ok') {
+    var dialog_title = '{{Recréer les commandes}}';
+    var dialog_message = '<form class="form-horizontal onsubmit="return false;">';
+    dialog_title = '{{Recréer les commandes}}';
+    dialog_message += '<label class="lbl lbl-warning" for="name">{{Attention, cela va supprimer les commandes existantes.}}</label> ';
+    dialog_message += '</form>';
+    bootbox.dialog({
+        title: dialog_title,
+        message: dialog_message,
+        buttons: {
+            "{{Annuler}}": {
+                className: "btn-danger",
+                callback: function () {}
+            },
+            success: {
+                label: "{{Démarrer}}",
+                className: "btn-success",
+                callback: function () {
+                    bootbox.confirm('{{Etes-vous sûr de vouloir récréer toutes les commandes ? Cela va supprimer les commandes existantes}}', function (result) {
+                        if (result) {
+                            $.ajax({
+                                type: "POST",
+                                url: "plugins/rosee/core/ajax/rosee.ajax.php",
+                                data: {
+                                    action: "autoDEL_eq",
+                                    id: $('.eqLogicAttr[data-l1key=id]').value(),
+                                },
+                                dataType: 'json',
+                                error: function (request, status, error) {
+                                    handleAjaxError(request, status, error);
+                                },
+                                success: function (data) {
+                                    /*if (data.state != 'ok') {
+                                        return;
+                                    } */
+                                    $('.eqLogicDisplayCard[data-eqLogic_id=' + $('.eqLogicAttr[data-l1key=id]').value() + ']').click();
                                     $('#div_alert').showAlert({
-                                        message: data.result,
-                                        level: 'danger'
+                                        message: '{{Opération réalisée avec succès}}',
+                                        level: 'success'
                                     });
-                                    return;
                                 }
-                                $('#div_alert').showAlert({
-                                    message: '{{Opération réalisée avec succès}}',
-                                    level: 'success'
-                                });
-                                $('.eqLogicDisplayCard[data-eqLogic_id=' + $('.eqLogicAttr[data-l1key=id]').value() + ']').click();
-                            }
-                        });
-                    }
-                });
-            }
-        },
-    }
-});*/
+                            });
+                        }
+                    });
+                }
+            },
+        }
+    });
 });
 
 $('#type_calcul').change(function () {
-    var text = $("#type_calcul").val();
-    if ((text == '')) {
-        $('#temperature').hide();
-        $('#temperature_offset').hide();
-        $('#humidite').hide();
-        $('#pressure').hide();
-        $('#DPR').hide();
-        $('#SHA').hide();
-    }
-    if ((text == 'rosee_givre')) {
-        $('#temperature').show();
-        $('#temperature_offset').show();
-        $('#humidite').show();
-        $('#pressure').show();
-        $('#DPR').show();
-        $('#SHA').show();
-    }
-    if ((text == 'rosee')) {
-        $('#temperature').show();
-        $('#temperature_offset').show();
-        $('#humidite').show();
-        $('#pressure').show();
-        $('#DPR').show();
-        $('#SHA').hide();
-    }
-    if ((text == 'humidityabs')) {
-        $('#temperature').show();
-        $('#temperature_offset').show();
-        $('#humidite').show();
-        $('#pressure').show();
-        $('#DPR').hide();
-        $('#SHA').hide();
-    }
-    if ((text == 'givre')) {
-        $('#temperature').show();
-        $('#temperature_offset').show();
-        $('#humidite').show();
-        $('#pressure').show();
-        $('#DPR').hide();
-        $('#SHA').show();
-    }
-    if ((text == 'tendance')) {
-        $('#temperature').hide();
-        $('#temperature_offset').hide();
-        $('#humidite').hide();
-        $('#pressure').show();
-        $('#DPR').hide();
-        $('#SHA').hide();
+    switch ($("#type_calcul").val()) {
+        case 'rosee_givre':
+            $('#temperature').show();
+            $('#temperature_offset').show();
+            $('#humidite').show();
+            $('#pressure').show();
+            $('#DPR').show();
+            $('#SHA').show();
+            break;
+        case 'rosee':
+            $('#temperature').show();
+            $('#temperature_offset').show();
+            $('#humidite').show();
+            $('#pressure').show();
+            $('#DPR').show();
+            $('#SHA').hide();
+            break;
+        case 'humidityabs':
+            $('#temperature').show();
+            $('#temperature_offset').show();
+            $('#humidite').show();
+            $('#pressure').show();
+            $('#DPR').hide();
+            $('#SHA').hide();
+            break;
+        case 'givre':
+            $('#temperature').show();
+            $('#temperature_offset').show();
+            $('#humidite').show();
+            $('#pressure').show();
+            $('#DPR').hide();
+            $('#SHA').show();
+            break;
+        case 'tendance':
+            $('#temperature').hide();
+            $('#temperature_offset').hide();
+            $('#humidite').hide();
+            $('#pressure').show();
+            $('#DPR').hide();
+            $('#SHA').hide();
+            break;
+        default:
+            $('#temperature').hide();
+            $('#temperature_offset').hide();
+            $('#humidite').hide();
+            $('#pressure').hide();
+            $('#DPR').hide();
+            $('#SHA').hide();
     }
 });
 
