@@ -1,6 +1,6 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 $plugin = plugin::byId('rosee'); // Obtenir l'identifiant du plugin
 sendVarToJS('eqType', $plugin->getId());
@@ -20,14 +20,21 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 <span>{{Configuration}}</span>
             </div>
         </div>
-        <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
+        <div class="input-group" style="margin:5px;">
+            <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
+            <div class="input-group-btn">
+                <a id="bt_resetSearch" class="btn" style="width:30px"><i class="fas fa-times"></i> </a>
+            </div>
+        </div>
         <legend><i class="fas fa-umbrella"></i> <i class="icon jeedomapp-weather"></i> {{Mes Points de Rosée, de Givre}}</legend>
         <div class="eqLogicThumbnailContainer">
             <?php
-			foreach ($eqLogics as $eqLogic) {
-				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
-                if ($eqLogic->getConfiguration('type_calcul') != 'tendance'){
-                    echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '" >';
+            $status_r = 0;
+            foreach ($eqLogics as $eqLogic) {
+                $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+                if ($eqLogic->getConfiguration('type_calcul') != 'tendance') {
+                    $status_r = 1;
+                    echo '<div class="eqLogicDisplayCard cursor ' . $opacity . '" data-eqLogic_id="' . $eqLogic->getId() . '" >';
                     if ($eqLogic->getConfiguration('type_calcul') == 'tendance') {
                         echo '<img src="' . $eqLogic->getImage() . '"/>';
                     } else {
@@ -37,16 +44,23 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
                     echo '</div>';
                 }
-			}
-			?>
+            }
+            if ($status_r == 1) {
+                //echo '</div>';
+            } else {
+                echo "<br/><br/><br/><center><span style='color:#767676;font-size:1em;font-weight: bold;margin-left: 10px'>{{Aucun équipement de type Points de Rosée ou de Givre a été créé.}}</span></center>";
+            }
+            ?>
         </div>
         <legend><i class="fas fa-chart-bar"></i> {{Mes Tendances}}</legend>
         <div class="eqLogicThumbnailContainer">
             <?php
-			foreach ($eqLogics as $eqLogic) {
+            $status = 0;
+            foreach ($eqLogics as $eqLogic) {
                 $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
-                if ($eqLogic->getConfiguration('type_calcul') == 'tendance'){
-                    echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '" >';
+                if ($eqLogic->getConfiguration('type_calcul') == 'tendance') {
+                    $status = 1;
+                    echo '<div class="eqLogicDisplayCard cursor ' . $opacity . '" data-eqLogic_id="' . $eqLogic->getId() . '" >';
                     if ($eqLogic->getConfiguration('type_calcul') == 'tendance') {
                         echo '<img src="' . $eqLogic->getImage() . '"/>';
                     } else {
@@ -56,8 +70,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
                     echo '</div>';
                 }
-			}
-			?>
+            }
+            if ($status == 1) {
+                echo '</div>';
+            } else {
+                echo "<br/><br/><br/><center><span style='color:#767676;font-size:1em;font-weight: bold;margin-left: 10px'>{{Aucun équipement de type Tendance a été créé.}}</span></center>";
+            }
+            ?>
         </div>
     </div>
 
@@ -81,21 +100,21 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     <fieldset>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">{{Nom de l'équipement}}</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
                                 <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l\'équipement}}" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">{{Objet parent}}</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
                                     <option value="">{{Aucun}}</option>
                                     <?php
-									foreach (jeeObject::all() as $object) {
+                                    foreach (jeeObject::all() as $object) {
                                         echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
-									}
-									?>
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -103,12 +122,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <label class="col-sm-2 control-label">{{Catégorie}}</label>
                             <div class="col-sm-10">
                                 <?php
-									foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
-										echo '<label class="checkbox-inline">';
-										echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
-										echo '</label>';
-									}
-								?>
+                                foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
+                                    echo '<label class="checkbox-inline">';
+                                    echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
+                                    echo '</label>';
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="form-group">
@@ -142,7 +161,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <label class="col-sm-2 control-label">{{Type de Calcul}}
                                 <sup><i class="fas fa-question-circle" title="{{Il est possible de se limiter à un seul calcul, Point de Rosée et Point de Givre fait tous les calculs}}"></i></sup>
                             </label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <select id="type_calcul" class="form-control eqLogicAttr" data-l1key="configuration" data-l2key="type_calcul">
                                     <option value=''>{{Aucun}}</option>
                                     <option value='humidityabs'>{{Humidité absolue}}</option>
@@ -157,7 +176,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <label class="col-md-2 control-label">{{Température}}
                                 <sup><i class="fas fa-question-circle" title="{{(°C) Commande température}}"></i></sup>
                             </label>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="input-group">
                                     <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="temperature" placeholder="{{Température °C}}">
                                     <span class="input-group-btn">
@@ -178,7 +197,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <label class="col-sm-2 control-label">{{Humidité Relative}}
                                 <sup><i class="fas fa-question-circle" title="{{(%) Commande humidité}}"></i></sup>
                             </label>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="input-group">
                                     <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="humidite" placeholder="{{Humidité Relative %}}">
                                     <span class="input-group-btn">
@@ -191,7 +210,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <label class="col-sm-2 control-label">{{Pression Atmosphérique}}
                                 <sup><i class="fas fa-question-circle" title="{{(hPa) Pression atmosphérique réelle sur le site. 1013.25 hPa par défaut si non renseignée.}}"></i></sup>
                             </label>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="input-group">
                                     <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="pression" placeholder="1013.25 hPa">
                                     <span class="input-group-btn">
@@ -225,17 +244,15 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 <table id="table_cmd" class="table table-bordered table-condensed">
                     <thead>
                         <tr>
-                            <th width="50px"> ID</th>
-                            <th width="450px">{{Nom}}</th>
-                            <th>{{Valeur}}</th>
-                            <th>{{Unité}}</th>
+                            <th style="width: 50px;"> ID</th>
+                            <th style="width: 550px;">{{Nom}}</th>
+                            <th style="width: 250px;">{{Sous-Type}}</th>
+                            <th style="width: 350px;">{{Min/Max - Unité}}</th>
                             <th>{{Paramètres}}</th>
-                            <th width="120px;">{{Options}}</th>
-                            <th style="width: 40px;"></th>
+                            <th style="width: 250px;">{{Options}}</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
 
@@ -244,6 +261,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 </div>
 
 <?php
-	include_file('desktop', 'rosee', 'js', 'rosee');
-	include_file('core', 'plugin.template', 'js');
+include_file('desktop', 'rosee', 'js', 'rosee');
+include_file('core', 'plugin.template', 'js');
 ?>

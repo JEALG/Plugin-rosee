@@ -18,7 +18,8 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-function rosee_install() {
+function rosee_install()
+{
     jeedom::getApiKey('rosee');
 
     config::save('functionality::cron5::enable', 0, 'rosee');
@@ -35,7 +36,8 @@ function rosee_install() {
     //message::add('Plugin Rosée - Givre - Tendance', 'Merci pour l\'installation du plugin.');
 }
 
-function rosee_update() {
+function rosee_update()
+{
     jeedom::getApiKey('rosee');
 
     $cron = cron::byClassAndFunction('rosee', 'pull');
@@ -48,15 +50,15 @@ function rosee_update() {
     }
 
     if (config::byKey('functionality::cron10::enable', 'rosee', -1) == -1) {
-       config::save('functionality::cron10::enable', 0, 'rosee');
+        config::save('functionality::cron10::enable', 0, 'rosee');
     }
 
     if (config::byKey('functionality::cron15::enable', 'rosee', -1) == -1) {
-       config::save('functionality::cron15::enable', 0, 'rosee');
+        config::save('functionality::cron15::enable', 0, 'rosee');
     }
 
     if (config::byKey('functionality::cron30::enable', 'rosee', -1) == -1) {
-       config::save('functionality::cron30::enable', 1, 'rosee');
+        config::save('functionality::cron30::enable', 1, 'rosee');
     }
 
     if (config::byKey('functionality::cronHourly::enable', 'rosee', -1) == -1) {
@@ -65,29 +67,21 @@ function rosee_update() {
 
     $plugin = plugin::byId('rosee');
     $eqLogics = eqLogic::byType($plugin->getId());
-    foreach ($eqLogics as $eqLogic){
-        updateLogicalId($eqLogic, 'message_givre', 'td');
-        updateLogicalId($eqLogic, 'message_givre_num', 'td_num');
-        updateLogicalId($eqLogic, 'alert_r', 'alert_1');
-        updateLogicalId($eqLogic, 'alert_g', 'alert_2');
-        updateLogicalId($eqLogic, 'alerte_rosee', 'alert_1');
-        updateLogicalId($eqLogic, 'alerte_givre', 'alert_2');
-        updateLogicalId($eqLogic, 'humidite_absolue', 'humidityabs');
+    foreach ($eqLogics as $eqLogic) {
+        updateLogicalId($eqLogic, 'humidityabs', null, '1');
+        updateLogicalId($eqLogic, 'rosee', null, '2');
+        updateLogicalId($eqLogic, 'givrage', null, '2');
     }
 
     //resave eqLogics for new cmd:
-    try
-    {
+    try {
         $eqs = eqLogic::byType('rosee');
-        foreach ($eqs as $eq)
-        {
+        foreach ($eqs as $eq) {
             $eq->save();
         }
-    }
-    catch (Exception $e)
-    {
+    } catch (Exception $e) {
         $e = print_r($e, 1);
-        log::add('rosee', 'error', 'rosee_update ERROR: '.$e);
+        log::add('rosee', 'error', 'rosee update ERROR : ' . $e);
     }
 
     //message::add('Plugin Rosée - Givre - Tendance', 'Merci pour la mise à jour de ce plugin, consultez le changelog.');
@@ -95,22 +89,26 @@ function rosee_update() {
     foreach (eqLogic::byType('rosee') as $rosee) {
         $rosee->getInformations();
     }
-
 }
 
-function updateLogicalId($eqLogic, $from, $to) {
-    //  Fonction pour renommer une commande
-    $roseeCmd = $eqLogic->getCmd(null, $from);
-    if (is_object($roseeCmd)) {
-        $roseeCmd->setLogicalId($to);
-        $roseeCmd->save();
+function updateLogicalId($eqLogic, $from, $to, $_historizeRound = null)
+{
+    $command = $eqLogic->getCmd(null, $from);
+    if (is_object($command)) {
+        if ($to != null) {
+            $command->setLogicalId($to);
+        }
+        if ($_historizeRound != null) {
+            $command->setConfiguration('historizeRound', $_historizeRound);
+        }
+        $command->save();
     }
 }
 
-function rosee_remove() {
+function rosee_remove()
+{
     $cron = cron::byClassAndFunction('rosee', 'pull');
     if (is_object($cron)) {
         $cron->remove();
     }
 }
-?>

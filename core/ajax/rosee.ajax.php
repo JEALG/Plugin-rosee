@@ -17,6 +17,7 @@
 
 try {
     require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+    require_once dirname(__FILE__) . '/../../core/php/rosee.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
@@ -55,4 +56,3 @@ try {
 } catch (Exception $e) {
     ajax::error(displayExeption($e), $e->getCode());
 }
-?>
