@@ -219,6 +219,8 @@ class rosee extends eqLogic
             $td_num = 1;
             $template_td = $templatecore_V4 . 'multiline';
             $template_td_num = 'rosee::tendance';
+            $name_td = 'Tendance';
+            $name_td_num = 'Tendance numérique';
             $_iconname_td = 1;
             $_iconname_td_num = 1;
         } else {
@@ -227,6 +229,8 @@ class rosee extends eqLogic
             $td_num = 1;
             $template_td = $templatecore_V4 . 'multiline';
             $template_td_num = $templatecore_V4 . 'line';
+            $name_td = 'Message';
+            $name_td_num = 'Message numérique';
             $_iconname_td = 1;
             $_iconname_td_num = null;
         }
@@ -255,9 +259,9 @@ class rosee extends eqLogic
             $order++;
         }
         if ($calcul == 'rosee_givre' || $calcul == 'rosee' || $calcul == 'givre' || $calcul == 'tendance') {
-            $Equipement->AddCommand('Message', 'td', 'info', 'string', $template_td, null, 'WEATHER_CONDITION', $td_num, 'default', 'default', 'default', 'default', $order, '0', true, $_iconname_td, null, null, null);
+            $Equipement->AddCommand($name_td, 'td', 'info', 'string', $template_td, null, 'WEATHER_CONDITION', $td_num, 'default', 'default', 'default', 'default', $order, '0', true, $_iconname_td, null, null, null);
             $order++;
-            $Equipement->AddCommand('Message numérique', 'td_num', 'info', 'numeric', $template_td_num, null, 'GENERIC_INFO', $td_num_visible, 'default', 'default', '0', $td_num_max, $order, '0', true, $_iconname_td_num, null, null, null);
+            $Equipement->AddCommand($name_td_num, 'td_num', 'info', 'numeric', $template_td_num, null, 'GENERIC_INFO', $td_num_visible, 'default', 'default', '0', $td_num_max, $order, '0', true, $_iconname_td_num, null, null, null);
         }
     }
 
