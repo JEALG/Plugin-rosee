@@ -68,7 +68,7 @@ function rosee_update()
     $plugin = plugin::byId('rosee');
     $eqLogics = eqLogic::byType($plugin->getId());
     foreach ($eqLogics as $eqLogic) {
-        updateLogicalId($eqLogic, 'humidityabs', null, '1');
+        updateLogicalId($eqLogic, 'humidityabs', null, '2');
         updateLogicalId($eqLogic, 'rosee', null, '2');
         updateLogicalId($eqLogic, 'givrage', null, '2');
     }
@@ -99,6 +99,7 @@ function updateLogicalId($eqLogic, $from, $to, $_historizeRound = null)
             $command->setLogicalId($to);
         }
         if ($_historizeRound != null) {
+            log::add('rosee', 'debug', 'Correction arrondi pour : ' . $from . 'Par :' . $_historizeRound);
             $command->setConfiguration('historizeRound', $_historizeRound);
         }
         $command->save();
