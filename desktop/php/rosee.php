@@ -215,7 +215,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             </label>
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="pression" placeholder="1013,25 hPa">
+                                    <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="pression" placeholder="1013.25 hPa">
                                     <span class="input-group-btn">
                                         <a class="btn btn-default listCmdActionOther roundedRight" id="bt_selectPresCmd"><i class="fas fa-list-alt"></i></a>
                                     </span>
@@ -232,10 +232,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         </div>
                         <div id="SHA" class="form-group" style="display:none">
                             <label class="col-sm-2 control-label">{{Seuil d'Humidité Absolue}}
-                                <sup><i class="fas fa-question-circle" title="{{Seuil d'humidité absolue en dessous duquel il est peu probable qu'il givre, 2,8 par défaut.}}"></i></sup>
+                                <sup><i class="fas fa-question-circle" title="{{Seuil d'humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut.}}"></i></sup>
                             </label>
                             <div class="col-md-1">
-                                <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="SHA" placeholder="2,8">
+                                <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="SHA" placeholder="2.8">
                             </div>
                         </div>
                     </fieldset>
