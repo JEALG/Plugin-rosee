@@ -193,7 +193,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <sup><i class="fas fa-question-circle" title="{{A ajuster en fonction des observations locales et de la position de la sonde, 0 par défaut.}}"></i></sup>
                             </label>
                             <div class="col-md-1">
-                                <input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="OffsetT" placeholder="0">
+                                <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="OffsetT" placeholder="0">
                             </div>
                         </div>
                         <div id="humidite" class="form-group" style="display:none">
@@ -227,7 +227,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <sup><i class="fas fa-question-circle" title="{{(°C) Seuil de déclenchement de l'alerte rosée, 2°C par défaut (dépression du point de rosée T°-Tr°) A ajuster en fonction des observations locales.}}"></i></sup>
                             </label>
                             <div class="col-md-1">
-                                <input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="DPR" placeholder="2">
+                                <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="DPR" placeholder="2">
                             </div>
                         </div>
                         <div id="SHA" class="form-group" style="display:none">
@@ -235,7 +235,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <sup><i class="fas fa-question-circle" title="{{Seuil d'humidité absolue en dessous duquel il est peu probable qu'il givre, 2,8 par défaut.}}"></i></sup>
                             </label>
                             <div class="col-md-1">
-                                <input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="SHA" placeholder="2,8">
+                                <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="SHA" placeholder="2,8">
                             </div>
                         </div>
                     </fieldset>
