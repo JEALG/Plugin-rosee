@@ -13,57 +13,28 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-$('#bt_selectTempCmd').on('click', function () {
-	jeedom.cmd.getSelectModal({
-		cmd: {
-			type: 'info',
-			subType: 'numeric'
-		}
-	}, function (result) {
-		$('.eqLogicAttr[data-l2key=temperature]').atCaret('insert', result.human);
-	});
-});
-$('#bt_resetSearch').off('click').on('click', function () {
-	$('#in_searchEqlogic').val('')
-	$('#in_searchEqlogic').keyup();
-})
-$('#bt_selectHumiCmd').on('click', function () {
-	jeedom.cmd.getSelectModal({
-		cmd: {
-			type: 'info',
-			subType: 'numeric'
-		}
-	}, function (result) {
-		$('.eqLogicAttr[data-l2key=humidite]').atCaret('insert', result.human);
-	});
-});
 
-$('#bt_selectPresCmd').on('click', function () {
-	jeedom.cmd.getSelectModal({
-		cmd: {
-			type: 'info',
-			subType: 'numeric'
-		}
-	}, function (result) {
-		$('.eqLogicAttr[data-l2key=pression]').atCaret('insert', result.human);
+/*
+* Permet la réorganisation des commandes dans l'équipement
+*/
+$("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+
+/*
+* Fonction Spécifique Plugin
+*/
+$('#div_pageContainer').off('click','.listCmdActionOther').on('click','.listCmdActionOther', function () {
+	var el = $(this);
+	jeedom.cmd.getSelectModal({cmd: {type: 'info',subType : 'numeric'}}, function (result) {
+	  el.closest('.input-group').find('input').value(result.human);
 	});
 });
 
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=type_calcul]').on('change', function () {
-	if ($(this).value() == 'tendance') {
+	if ($(this).value() == 'tendance' || $(this).value() == 'temperature') {
 		$('#img_device').attr("src", 'plugins/rosee/core/config/img/' + $(this).value() + '.png');
 	} else {
 		$('#img_device').attr("src", 'plugins/rosee/plugin_info/rosee_icon.png');
 	}
-});
-
-$("#table_cmd").sortable({
-	axis: "y",
-	cursor: "move",
-	items: ".cmd",
-	placeholder: "ui-state-highlight",
-	tolerance: "intersect",
-	forcePlaceholderSize: true
 });
 
 $('#bt_autoDEL_eq').on('click', function () {
@@ -119,32 +90,51 @@ $('#bt_autoDEL_eq').on('click', function () {
 $('#type_calcul').change(function () {
 	$('#temperature').show();
 	$('#temperature_offset').show();
-	$('#humidite').show();
-	$('#pressure').show();
-	$('#DPR').show();
-	$('#SHA').show();
+	$('#humidite').hide();
+	$('#DPR').hide();
+	$('#SHA').hide();
+	$('#step1').hide();
+	$('#step2').hide();
+	$('#wind').hide();
 	switch ($("#type_calcul").val()) {
 		case 'rosee':
-			$('#SHA').hide(); //
+			$('#humidite').show();
+			$('#DPR').show();
+			$('#pressure').show();
 			break;
 		case 'humidityabs':
-			$('#DPR').hide(); //
-			$('#SHA').hide(); //
+			$('#humidite').show();
+			$('#pressure').show();
 			break;
 		case 'givre':
-			$('#DPR').hide(); //
+			$('#humidite').show();
+			$('#SHA').show();
+			$('#pressure').show();
 			break;
+		case 'rosee_givre':
+			$('#humidite').show();
+			$('#DPR').show();
+			$('#SHA').show();
+			$('#pressure').show();
+			break;
+		case 'temperature':
+			$('#humidite').show();
+			$('#pressure').hide();
+			$('#wind').show();
+			$('#step1').show();
+			$('#step2').show();
+				break;
 		case 'tendance':
 			$('#temperature').hide();
 			$('#temperature_offset').hide();
-			$('#humidite').hide(); //
-			$('#DPR').hide(); //
-			$('#SHA').hide(); //
+			$('#pressure').show();
 			break;
 	}
 });
 
-
+/*
+* Fonction permettant l'affichage des commandes dans l'équipement
+*/
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
 		var _cmd = {
@@ -158,50 +148,56 @@ function addCmdToTable(_cmd) {
 		return;
 	}
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-	tr += '<td>';
-	tr += '<span class="cmdAttr" data-l1key="id"></span>';
+	tr += '<td style="min-width:50px;width:70px;">';
+	tr += '<span class="cmdAttr" data-l1key="id" ></span>';
 	tr += '</td>';
-	tr += '<td>';
+	tr += '<td style="min-width:750px;width:850px;">';
 	tr += '<div class="row">';
-	tr += '<div class="col-sm-3">';
-	tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon"><i class="fas fa-flag"></i> Icône</a>';
+	tr += '<div class="col-xs-9">';
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom de la commande}}">';
+	tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" disabled style="display : none;margin-top : 5px;" title="{{Commande information liée}}">';
+	tr += '<option value="">{{Aucune}}</option>';
+	tr += '</select>';
+	tr += '</div>';
+	tr += '<div class="col-xs-3">';
+	tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon" title="Changer l\'icône"><i class="fa fa-flag"></i> {{Icône}}</a>';
 	tr += '<span class="cmdAttr" data-l1key="display" data-l2key="icon" style="margin-left : 10px;"></span>';
 	tr += '</div>';
-	tr += '<div class="col-sm-8">';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name">';
-	tr += '</div>';
 	tr += '</div>';
 	tr += '</td>';
 	tr += '<td>';
-	tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-bottom : 5px;" />';
-	tr += '<span class="cmdAttr subType"  subType="' + init(_cmd.subType) + ' " ></span>';
+	tr += '<span disabled class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
+    tr += '<span disabled class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	tr += '</td>';
-	tr += '<td>';
-	if (init(_cmd.subType) == 'numeric') {
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="width : 90px;display : inline-block;"> ';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="width : 90px;display : inline-block;"> ';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="unite" placeholder="{{Unité}}" title="{{Unité}}" style="width : 90px; display:inline-block"></td>';
-	}
-	tr += '</td>';
-	tr += '<td>';
+	tr += '<td style="min-width:140px;width:140px;">';
 	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
-	if (_cmd.subType == "binary") {
-		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
-		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary"/>{{Inverser}}</label></span> ';
-	}
+	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="invertBinary"/>{{Inverser}}</label></span> ';
+	tr += '</td>';
+	tr += '<td style="min-width:200px;">';
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min.}}" title="{{Min.}}" style="width:30%;display:inline-block;"/> ';
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max.}}" title="{{Max.}}" style="width:30%;display:inline-block;"/> ';
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="unite" placeholder="{{Unité}}" title="{{Unité}}" style="width:30%;display:inline-block;"/>';
 	tr += '</td>';
 	tr += '<td>';
 	if (is_numeric(_cmd.id)) {
-		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
-		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure" title="Configuration avancée"><i class="fas fa-cogs"></i></a> ';
+		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test" title="Tester la commande"><i class="fas fa-rss"></i> {{Tester}}</a>';
 	}
-	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i></td>';
+	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="Supprimer la commande"></i></td>';
 	tr += '</tr>';
-	$('#table_cmd tbody').append(tr);
-	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
-	if (isset(_cmd.type)) {
-		$('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
-	}
-	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
-
+   	$('#table_cmd tbody').append(tr);
+   	var tr = $('#table_cmd tbody tr').last();
+   	jeedom.eqLogic.builSelectCmd({
+     	id:  $('.eqLogicAttr[data-l1key=id]').value(),
+     	filter: {type: 'info'},
+     	error: function (error) {
+       		$('#div_alert').showAlert({message: error.message, level: 'danger'});
+     	},
+     	success: function (result) {
+       	tr.find('.cmdAttr[data-l1key=value]').append(result);
+       	tr.setValues(_cmd, '.cmdAttr');
+       	jeedom.cmd.changeType(tr, init(_cmd.subType));
+     	}
+   });
 }

@@ -200,7 +200,7 @@ class rosee extends eqLogic
     public function postSave()
     {
         $_eqName = $this->getName();
-        log::add(__CLASS__, 'debug', 'postSave() =>' . $_eqName);
+        log::add(__CLASS__, 'debug', 'Sauvegarde de l\'équipement [postSave()] : ' . $_eqName);
         $order = 1;
 
         /*  ********************** Calcul *************************** */
@@ -220,6 +220,18 @@ class rosee extends eqLogic
             $name_td_num = 'Tendance numérique';
             $_iconname_td = 1;
             $_iconname_td_num = 1;
+        } else if ($calcul == 'temperature') {
+            $td_num_max = 8;
+            $td_num_visible = 0;
+            $td_num = 1;
+            $template_td = $templatecore_V4 . 'multiline';
+            $template_td_num = $templatecore_V4 . 'line';
+            $name_td = 'Degré de comfort';
+            $name_td_num = 'Degré de comfort numérique';
+            $_iconname_td = 1;
+            $_iconname_td_num = null;
+            $alert1 = 'Pré Alerte Humidex';
+            $alert2 = 'Alerte Humidex';
         } else {
             $td_num_max = 3;
             $td_num_visible = 0;
@@ -230,17 +242,20 @@ class rosee extends eqLogic
             $name_td_num = 'Message numérique';
             $_iconname_td = 1;
             $_iconname_td_num = null;
+            $alert1 = 'Alerte rosée';
+            $alert2 = 'Alerte givre';
         }
 
         $Equipement = eqlogic::byId($this->getId());
+
 
         if ($calcul == 'rosee_givre' || $calcul == 'givre' || $calcul == 'humidityabs') {
             $Equipement->AddCommand('Humidité absolue', 'humidityabs', 'info', 'numeric', $templatecore_V4 . 'line', 'g/m3', 'WEATHER_HUMIDITY', 1, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
             $order++;
         }
 
-        if ($calcul == 'rosee_givre' || $calcul == 'rosee') {
-            $Equipement->AddCommand('Alerte rosée', 'alert_1', 'info', 'binary', $templatecore_V4 . 'line', null, 'SIREN_STATE', 1, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, null, null);
+        if ($calcul == 'rosee_givre' || $calcul == 'rosee' || $calcul == 'temperature') {
+            $Equipement->AddCommand($alert1, 'alert_1', 'info', 'binary', $templatecore_V4 . 'line', null, 'SIREN_STATE', 1, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, null, null);
             $order++;
         }
 
@@ -249,16 +264,54 @@ class rosee extends eqLogic
             $order++;
         }
 
-        if ($calcul == 'rosee_givre' || $calcul == 'givre') {
-            $Equipement->AddCommand('Alerte givre', 'alert_2', 'info', 'binary', $templatecore_V4 . 'line', null, 'SIREN_STATE', 1, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, null, null);
+        if ($calcul == 'rosee_givre' || $calcul == 'givre' || $calcul == 'temperature') {
+            $Equipement->AddCommand($alert2, 'alert_2', 'info', 'binary', $templatecore_V4 . 'line', null, 'SIREN_STATE', 1, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, null, null);
             $order++;
-            $Equipement->AddCommand('Point de givrage', 'givrage', 'info', 'numeric', $templatecore_V4 . 'line', '°C', 'GENERIC_INFO', 1, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
+            if ($calcul != 'temperature') {
+                $Equipement->AddCommand('Point de givrage', 'givrage', 'info', 'numeric', $templatecore_V4 . 'line', '°C', 'GENERIC_INFO', 1, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
+                $order++;
+            }
+        }
+        if ($calcul == 'temperature') {
+            $Equipement->AddCommand('Windchill', 'windchill', 'info', 'numeric', $templatecore_V4 . 'line', '°C', 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 1, null);
+            $order++;
+            $Equipement->AddCommand('Indice de chaleur', 'heat_index', 'info', 'numeric', $templatecore_V4 . 'multiline', '°C', 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 1, null);
             $order++;
         }
-        if ($calcul == 'rosee_givre' || $calcul == 'rosee' || $calcul == 'givre' || $calcul == 'tendance') {
+        if ($calcul != 'humidityabs') {
             $Equipement->AddCommand($name_td, 'td', 'info', 'string', $template_td, null, 'WEATHER_CONDITION', $td_num, 'default', 'default', 'default', 'default', $order, '0', true, $_iconname_td, null, null, null);
             $order++;
             $Equipement->AddCommand($name_td_num, 'td_num', 'info', 'numeric', $template_td_num, null, 'GENERIC_INFO', $td_num_visible, 'default', 'default', '0', $td_num_max, $order, '0', true, $_iconname_td_num, null, null, null);
+            $order++;
+        }
+
+        if ($calcul != 'tendance') {
+            $Equipement->AddCommand('Température', 'temperature', 'info', 'numeric', $templatecore_V4 . 'line', '°C', 'WEATHER_TEMPERATURE', 0, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
+            $order++;
+        }
+        if ($calcul != 'temperature') {
+            $Equipement->AddCommand('Pression Atmosphérique', 'pressure', 'info', 'numeric', $templatecore_V4 . 'line', 'hPa', 'WEATHER_PRESSURE', 0, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
+            $order++;
+        }
+        if ($calcul == 'tendance') {
+            $Equipement->AddCommand('dPdT', 'dPdT', 'info', 'numeric', $templatecore_V4 . 'line', 'hPa/h', 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
+            $order++;
+        }
+        if ($calcul == 'rosee_givre' || $calcul == 'givre' || $calcul == 'humidityabs' || $calcul == 'temperature') {
+            $Equipement->AddCommand('Humidité Relative', 'humidityrel', 'info', 'numeric', $templatecore_V4 . 'line', '%', 'WEATHER_HUMIDITY', 0, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
+            $order++;
+        }
+        if ($calcul == 'temperature') {
+            $idvirt = str_replace("#", "", $this->getConfiguration('wind'));
+            $cmdvirt = cmd::byId($idvirt);
+            if (is_object($cmdvirt)) {
+                $wind_unite = $cmdvirt->getUnite();
+            }
+            if ($wind_unite == 'm/s') {
+                $wind_unite = ' km/h';
+            }
+            $Equipement->AddCommand('Vitesse du Vent', 'wind', 'info', 'numeric', $templatecore_V4 . 'line', $wind_unite, 'WEATHER_WIND_SPEED', 0, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
+            $order++;
         }
     }
 
@@ -335,24 +388,65 @@ class rosee extends eqLogic
             }
             log::add(__CLASS__, 'debug', '│ Température avec Offset : ' . $temperature . ' °C' . ' - Offset Température : ' . $OffsetT . ' °C');
         }
-
-        /*  ********************** PRESSION *************************** */
-        $pressure = $this->getConfiguration('pression');
-        if ($pressure == '' && $calcul != 'tendance') { //valeur par défaut de la pression atmosphérique : 1013.25 hPa
-            $pressure = 1013.25;
-            log::add(__CLASS__, 'debug', '│ Pression Atmosphérique aucun équipement sélectionné, valeur par défaut : ' . $pressure . ' hPa');
-        } else {
-            $pressureID = str_replace("#", "", $this->getConfiguration('pression'));
-            $cmdvirt = cmd::byId($pressureID);
+        /*  ********************** VENT *************************** */
+        if ($calcul == 'temperature') {
+            $idvirt = str_replace("#", "", $this->getConfiguration('wind'));
+            $cmdvirt = cmd::byId($idvirt);
             if (is_object($cmdvirt)) {
-                $pressure = $cmdvirt->execCmd();
-                log::add(__CLASS__, 'debug', '│ Pression Atmosphérique : ' . $pressure . ' hPa');
+                $wind = $cmdvirt->execCmd();
+                $wind_unite = $cmdvirt->getUnite();
+                log::add(__CLASS__, 'debug', '│ Vent : ' . $wind . ' ' . $wind_unite);
             } else {
-                throw new Exception(__('Le champ "Pression Atmosphérique" ne peut être vide', __FILE__));
-                log::add(__CLASS__, 'error', '│ Configuration : Pression Atmosphérique inexistante : ' . $this->getConfiguration('pression'));
+                throw new Exception(__('Le champ "Vitesse du Vent" ne peut être vide', __FILE__));
+                log::add(__CLASS__, 'error', 'Configuration : vent non existant : ' . $this->getConfiguration('wind'));
+            }
+            if ($wind_unite == 'm/s') {
+                log::add(__CLASS__, 'debug', '│ La vitesse du vent sélectionnée est en m/s, le plugin va convertir en km/h');
+                $wind = $wind * 3.6;
+                $wind_unite = ' km/h';
+                log::add(__CLASS__, 'debug', '│ Vent : ' . $wind  . $wind_unite);
             }
         }
 
+        /*  ********************** Seuil PRE-Alerte Humidex *************************** */
+        if ($calcul == 'temperature') {
+            $pre_seuil = $this->getConfiguration('PRE_SEUIL');
+            if ($pre_seuil == '') {
+                $pre_seuil = 30;
+                log::add(__CLASS__, 'debug', '│ Aucun Seuil Pré-Alerte Humidex de saisie, valeur par défaut : ' . $pre_seuil . ' °C');
+            } else {
+                log::add(__CLASS__, 'debug', '│ Seuil Pré-Alerte Humidex : ' . $pre_seuil . ' °C');
+            }
+        }
+        /*  ********************** Seuil Alerte Humidex*************************** */
+        if ($calcul == 'temperature') {
+            $seuil = $this->getConfiguration('SEUIL');
+            if ($seuil == '') {
+                $seuil = 40;
+                log::add(__CLASS__, 'debug', '│ Aucun Seuil Alerte Humidex de saisie, valeur par défaut : ' . $seuil . ' °C');
+            } else {
+                log::add(__CLASS__, 'debug', '│ Seuil Alerte Humidex : ' . $seuil . ' °C');
+            }
+        }
+
+        /*  ********************** PRESSION *************************** */
+        if ($calcul != 'temperature') {
+            $pressure = $this->getConfiguration('pression');
+            if ($pressure == '' && $calcul != 'tendance') { //valeur par défaut de la pression atmosphérique : 1013.25 hPa
+                $pressure = 1013.25;
+                log::add(__CLASS__, 'debug', '│ Pression Atmosphérique aucun équipement sélectionné, valeur par défaut : ' . $pressure . ' hPa');
+            } else {
+                $pressureID = str_replace("#", "", $this->getConfiguration('pression'));
+                $cmdvirt = cmd::byId($pressureID);
+                if (is_object($cmdvirt)) {
+                    $pressure = $cmdvirt->execCmd();
+                    log::add(__CLASS__, 'debug', '│ Pression Atmosphérique : ' . $pressure . ' hPa');
+                } else {
+                    throw new Exception(__('Le champ "Pression Atmosphérique" ne peut être vide', __FILE__));
+                    log::add(__CLASS__, 'error', '│ Configuration : Pression Atmosphérique inexistante : ' . $this->getConfiguration('pression'));
+                }
+            }
+        }
         /*  ********************** HUMIDITE *************************** */
         $idvirt = str_replace("#", "", $this->getConfiguration('humidite'));
         $cmdvirt = cmd::byId($idvirt);
@@ -400,9 +494,9 @@ class rosee extends eqLogic
         if ($calcul == 'tendance') {
             log::add(__CLASS__, 'debug', '┌───────── CALCUL DE LA TENDANCE : ' . $_eqName);
             $va_result_T = rosee::getTendance($pressureID);
-            // Partage des données du tableau
             $td_num = $va_result_T[0];
             $td = $va_result_T[1];
+            $dPdT = $va_result_T[2];
             log::add(__CLASS__, 'debug', '└─────────');
         }
 
@@ -411,7 +505,6 @@ class rosee extends eqLogic
         if ($calcul == 'rosee_givre' || $calcul == 'rosee' || $calcul == 'givre') {
             log::add('rosee', 'debug', '┌───────── CALCUL DU POINT DE ROSEE : ' . $_eqName);
             $va_result_R = rosee::getRosee($temperature, $humidity, $dpr);
-            // Partage des données du tableau
             $rosee_point = $va_result_R[0];
             $alert_1 = $va_result_R[1];
             $rosee = $va_result_R[2];
@@ -427,7 +520,6 @@ class rosee extends eqLogic
         if ($calcul == 'rosee_givre' || $calcul == 'givre') {
             log::add(__CLASS__, 'debug', '┌───────── CALCUL DU POINT DE GIVRAGE : ' . $_eqName);
             $va_result_G = rosee::getGivre($temperature, $SHA, $humidityabs_m3, $rosee);
-            // Partage des données du tableau
             $td_num = $va_result_G[0];
             $td = $va_result_G[1];
             $alert_2  = $va_result_G[2];
@@ -449,6 +541,18 @@ class rosee extends eqLogic
             $alert_2 = 0;
             $frost_point = 5;
         };
+        /*  ********************** Calcul de la température ressentie *************************** */
+        if ($calcul == 'temperature') {
+            log::add(__CLASS__, 'debug', '┌───────── CALCUL DE LA TEMPERATURE RESSENTIE : ' . $_eqName);
+            $result_T = rosee::getTemperature($wind, $temperature, $humidity, $pre_seuil, $seuil);
+            $windchill = $result_T[0];
+            $td = $result_T[1];
+            $td_num = $result_T[2];
+            $heat_index = $result_T[3];
+            $alert_1 = $result_T[4];
+            $alert_2 = $result_T[5];
+            log::add(__CLASS__, 'debug', '└─────────');
+        }
 
         /*  ********************** Mise à Jour des équipements *************************** */
         log::add(__CLASS__, 'debug', '┌───────── MISE A JOUR : ' . $_eqName);
@@ -460,65 +564,95 @@ class rosee extends eqLogic
                 if (is_object($Command)) {
                     switch ($Command->getLogicalId()) {
                         case "alert_1":
-                            log::add(__CLASS__, 'debug', '│ ┌───────── ROSEE : Alerte');
-                            log::add(__CLASS__, 'debug', '│ │ Etat Alerte Rosée : ' . $alert_1);
+                            if ($calcul == 'temperature') {
+                                $log = ' Pré-alerte Humidex : ';
+                            } else {
+                                $log = ' Etat Alerte Rosée : ';
+                            }
+                            log::add(__CLASS__, 'debug', '│' . $log . $alert_1);
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $alert_1);
-                            log::add(__CLASS__, 'debug', '│ └─────────');
                             break;
                         case "alert_2":
-                            log::add(__CLASS__, 'debug', '│ ┌───────── GIVRE : Alerte');
-                            log::add(__CLASS__, 'debug', '│ │ Etat Alerte Rosée : ' . $alert_2);
+                            if ($calcul == 'temperature') {
+                                $log = ' Alerte Haute Humidex : ';
+                            } else {
+                                $log = ' Etat Alerte Givre : ';
+                            }
+                            log::add(__CLASS__, 'debug', '│' . $log . $alert_2);
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $alert_2);
-                            log::add(__CLASS__, 'debug', '│ └─────────');
                             break;
                         case "givrage":
-                            log::add(__CLASS__, 'debug', '│ ┌───────── GIVRE : Point de Givre');
-                            log::add(__CLASS__, 'debug', '│ │ Point de givrage : ' . $frost_point . ' °C');
+                            log::add(__CLASS__, 'debug', '│ Point de givrage : ' . $frost_point . ' °C');
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $frost_point);
-                            log::add(__CLASS__, 'debug', '│ └─────────');
+                            break;
+                        case "heat_index":
+                            log::add(__CLASS__, 'debug', '│ Indice de Chaleur (Humidex) : ' . $heat_index . ' °C');
+                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $heat_index);
                             break;
                         case "humidityabs":
-                            log::add(__CLASS__, 'debug', '│ ┌───────── HUMIDITE ABSOLUE');
-                            log::add(__CLASS__, 'debug', '│ │ Humidité Absolue : ' . $humidityabs_m3 . ' g/m3');
+                            log::add(__CLASS__, 'debug', '│ Humidité Absolue : ' . $humidityabs_m3 . ' g/m3');
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $humidityabs_m3);
-                            log::add(__CLASS__, 'debug', '│ └─────────');
+                            break;
+                        case "humidityrel":
+                            log::add(__CLASS__, 'debug', '│ Humidité Relative : ' . $humidity . ' %');
+                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $humidity);
+                            break;
+                        case "pressure":
+                            log::add(__CLASS__, 'debug', '│ Pression Atmosphérique : ' . $pressure . ' hPa');
+                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $pressure);
+                            break;
+                        case "temperature":
+                            log::add(__CLASS__, 'debug', '│ Température : ' . $temperature . ' °C');
+                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $temperature);
                             break;
                         case "rosee":
-                            log::add(__CLASS__, 'debug', '│ ┌───────── ROSEE : Point de rosée');
-                            log::add(__CLASS__, 'debug', '│ │ Point de Rosée : ' . $rosee_point . ' °C');
+                            log::add(__CLASS__, 'debug', '│ Point de Rosée : ' . $rosee_point . ' °C');
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $rosee_point);
-                            log::add(__CLASS__, 'debug', '│ └─────────');
                             break;
                         case "td":
-                            log::add(__CLASS__, 'debug', '│ ┌───────── MESSAGE : Alerte format texte');
                             if (isset($td)) {
                                 if ($calcul == 'tendance') {
-                                    $start_log_td = ' │ Tendance : ';
+                                    $log = ' Tendance (format texte) : ';
+                                } else if ($calcul == 'temperature') {
+                                    $log = ' Degré de comfort (format texte) : ';
                                 } else {
-                                    $start_log_td = ' │ Message Alerte givre : ';
+                                    $log = ' Message Alerte givre (format texte) : ';
                                 }
-                                log::add(__CLASS__, 'debug', '│' . $start_log_td . $td);
+                                log::add(__CLASS__, 'debug', '│' . $log . $td);
                                 $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $td);
                             } else {
                                 log::add(__CLASS__, 'debug', '│ Problème avec la variable td non déclaré ');
                             }
-                            log::add(__CLASS__, 'debug', '│ └─────────');
+                            break;
+                        case "dPdT":
+                            log::add(__CLASS__, 'debug', '│ Tendance dPdT : ' . $dPdT . ' hPa/h');
+                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $dPdT);
                             break;
                         case "td_num":
-                            log::add(__CLASS__, 'debug', '│ ┌───────── MESSAGE : Alerte format numérique');
                             if (isset($td_num)) {
                                 if ($calcul == 'tendance') {
-                                    $start_log_td = ' │ Tendance numérique : ';
+                                    $log = ' Tendance (format numérique) : ';
+                                } else if ($calcul == 'temperature') {
+                                    $log = ' Degré de comfort (format numérique) : ';
                                 } else {
-                                    $start_log_td = ' │ Message Alerte givre numérique : ';
+                                    $log = ' Message Alerte givre (format numérique) : ';
                                 }
-                                log::add(__CLASS__, 'debug', '│' . $start_log_td . $td_num);
+                                log::add(__CLASS__, 'debug', '│' . $log . $td_num);
                                 $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $td_num);
                             } else {
                                 log::add(__CLASS__, 'debug', '│ Problème avec la variable td_num non déclaré ');
                             }
-                            log::add(__CLASS__, 'debug', '│ └─────────');
                             break;
+                        case "wind":
+                            log::add(__CLASS__, 'debug', '│ Vitesse du vent : ' . $wind . $wind_unite);
+                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $wind);
+                            break;
+                        case "windchill":
+                            log::add(__CLASS__, 'debug', '│ Windchill : ' . $windchill . ' °C');
+                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $windchill);
+                            break;
+                        default:
+                            log::add(__CLASS__, 'debug', '│ test ' . $Command->getLogicalId());
                     }
                 }
             }
@@ -622,13 +756,12 @@ class rosee extends eqLogic
         $endDate = $histo->collectDate($pressureID);
 
         // calcul du timestamp actuel
-        log::add('rosee', 'debug', '│ ┌─────── Timestamp -15min');
+        log::add(__CLASS__, 'debug', '│ ┌─────── Timestamp -15min');
         $_date1 = new DateTime("$endDate");
         $_date2 = new DateTime("$endDate");
         $startDate = $_date1->modify('-15 minute');
         $startDate = $_date1->format('Y-m-d H:i:s');
-        log::add(__CLASS__, 'debug', '│ │ Start Date : ' . $startDate);
-        log::add(__CLASS__, 'debug', '│ │ End Date : ' . $endDate);
+        log::add(__CLASS__, 'debug', '│ │ Start / End Date : ' . $startDate . ' / ' . $endDate);
 
         // dernière mesure barométrique
         $h1 = $histo->lastBetween($pressureID, $startDate, $endDate);
@@ -641,8 +774,7 @@ class rosee extends eqLogic
         $endDate = $_date2->format('Y-m-d H:i:s');
         $startDate = $_date1->modify('-2 hour');
         $startDate = $_date1->format('Y-m-d H:i:s');
-        log::add(__CLASS__, 'debug', '│ │ Start Date : ' . $startDate);
-        log::add(__CLASS__, 'debug', '│ │ End Date : ' . $endDate);
+        log::add(__CLASS__, 'debug', '│ │ Start / End Date : ' . $startDate . ' / ' . $endDate);
 
         // mesure barométrique -2h
         $h2 = $histo->lastBetween($pressureID, $startDate, $endDate);
@@ -659,17 +791,16 @@ class rosee extends eqLogic
         log::add(__CLASS__, 'debug', '│ └───────');
 
         // calcul du timestamp - 4h
-        log::add('rosee', 'debug', '│ ┌─────── Timestamp -4h');
+        log::add(__CLASS__, 'debug', '│ ┌─────── Timestamp -4h');
         $endDate = $_date2->modify('-2 hour');
         $endDate = $_date2->format('Y-m-d H:i:s');
         $startDate = $_date1->modify('-2 hour');
         $startDate = $_date1->format('Y-m-d H:i:s');
-        log::add(__CLASS__, 'debug', '│ │ Start Date : ' . $startDate);
-        log::add(__CLASS__, 'debug', '│ │ End Date : ' . $endDate);
+        log::add(__CLASS__, 'debug', '│ │ Start / End Date : ' . $startDate . ' / ' . $endDate);
 
         // mesure barométrique -4h
         $h4 = $histo->lastBetween($pressureID, $startDate, $endDate);
-        log::add('rosee', 'debug', '│ │ Pression Atmosphérique : ' . $h4 . ' hPa');
+        log::add(__CLASS__, 'debug', '│ │ Pression Atmosphérique : ' . $h4 . ' hPa');
 
         // calculs de tendance 2h/4h
         if ($h4 != null) {
@@ -711,7 +842,98 @@ class rosee extends eqLogic
             $td_num = 0;
         };
         log::add(__CLASS__, 'debug', '│ └─────────');
-        return array($td_num, $td);
+        return array($td_num, $td, $dPdT);
+    }
+    /*  ********************** Calcul de la Température ressentie *************************** */
+    public static function getTemperature($wind, $temperature, $humidity, $pre_seuil, $seuil)
+    {
+        /*  ********************** Calcul du Windchill *************************** */
+        log::add(__CLASS__, 'debug', '│ ┌───────── CALCUL DU WINDCHILL');
+
+        if ($temperature > 10.0) {
+            $windchill = $temperature;
+        } else {
+            if ($wind >= 4.8) {
+                $Terme1 = 13.12 + 0.6215 * $temperature;
+                $Terme2 = 0.3965 * $temperature - 11.37;
+                $Terme3 = pow($wind, 0.16);
+                $windchill = $Terme2 * $Terme3 + $Terme1;
+            } else {
+                $windchill = $temperature + 0.2 * (0.1345 * $temperature - 1.59) * $wind;
+            }
+        }
+        log::add(__CLASS__, 'debug', '│ │ Windchill : ' . $windchill . '°C');
+        log::add(__CLASS__, 'debug', '│ └───────');
+
+        /*  ********************** Calcul de l'indice de chaleur *************************** */
+        log::add(__CLASS__, 'debug', '│ ┌───────── CALCUL DU FACTEUR HUMIDEX');
+        $c1 = -42.379;
+        $c2 = 2.04901523;
+        $c3 = 10.14333127;
+        $c4 = -0.22475541;
+        $c5 = -6.83783 * pow(10, -3);
+        $c6 = -5.481717 * pow(10, -2);
+        $c7 = 1.22874 * pow(10, -3);
+        $c8 = 8.5282 * pow(10, -4);
+        $c9 = -1.99 * pow(10, -6);
+        $tempF = 32.0 + 1.8 * $temperature;
+        log::add(__CLASS__, 'debug', '│ │ Température (F) : ' . $tempF . ' F');
+        $terme1 = $c1 + $c2 * $tempF + $c3 * $humidity + $c4 * $tempF * $humidity;
+        $terme2 = $c5 * pow($tempF, 2.0);
+        $terme3 = $c6 * pow($humidity, 2.0);
+        $terme4 = $c7 * $humidity * pow($tempF, 2.0);
+        $terme5 = $c8 * $tempF * pow($humidity, 2.0);
+        $terme6 = $c9 * pow($tempF, 2.0) * pow($humidity, 2.0);
+        $heat_index_F = $terme1 + $terme2 + $terme3 + $terme4 + $terme5 + $terme6;
+        $heat_index = ($heat_index_F - 32.0) / 1.8;
+        log::add(__CLASS__, 'debug', '│ │ Indice de Chaleur (Humidex) : ' . $heat_index . ' °C');
+
+        if ($heat_index < 15.0) {
+            $td = 'Sensation de frais ou de froid';
+            $td_num = 1;
+        } elseif ($heat_index >= 15.0 && $heat_index <= 19.0) {
+            $td = 'Aucun inconfort';
+            $td_num = 2;
+        } elseif ($heat_index > 19.0 && $heat_index <= 29.0) {
+            $td = "Sensation de bien être";
+            $td_num = 3;
+        } elseif ($heat_index > 29.0 && $heat_index <= 34.0) {
+            $td = "Sensation d'inconfort plus ou moins grande";
+            $td_num = 4;
+        } elseif ($heat_index > 34.0 && $heat_index <= 39.0) {
+            $td = "Sensation d'inconfort assez grande. Prudence. Ralentir certaines activités en plein air.";
+            $td_num = 5;
+        } elseif ($heat_index > 39.0 && $heat_index <= 45.0) {
+            $td = "Sensation d'inconfort généralisée. Danger. Éviter les efforts.";
+            $td_num = 6;
+        } elseif ($heat_index > 45.0 && $heat_index <= 53.0) {
+            $td = 'Danger extrême. Arrêt de travail dans de nombreux domaines.';
+            $td_num = 7;
+        } else {
+            $td = 'Coup de chaleur imminent (danger de mort).';
+            $td_num = 8;
+        }
+        log::add(__CLASS__, 'debug', '│ └─────────');
+
+        /*  ********************** Calcul de l'alerte inconfort indice de chaleur en fonction du seuil d'alerte *************************** */
+        log::add(__CLASS__, 'debug', '│ ┌───────── ALERTE HUMIDEX');
+        if (($heat_index) >= $pre_seuil) {
+            $alert_1 = 1;
+        } else {
+            $alert_1 = 0;
+        }
+        log::add(__CLASS__, 'debug', '│ │ Seuil Pré-alerte Humidex : ' . $alert_1);
+
+        if (($heat_index) >= $seuil) {
+            $alert_2 = 1;
+        } else {
+            $alert_2 = 0;
+        }
+        log::add(__CLASS__, 'debug', '│ │ Seuil Alerte Haute Humidex : ' . $alert_2);
+        log::add(__CLASS__, 'debug', '│ └─────────');
+
+
+        return array($windchill, $td, $td_num, $heat_index, $alert_1, $alert_2);
     }
 }
 
