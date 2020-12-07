@@ -152,6 +152,15 @@ class rosee extends eqLogic
             $Command->save();
         }
 
+        if ($valuemin != 'default') {
+            $Command->setconfiguration('minValue', $valuemin);
+            $Command->save();
+        }
+        if ($valuemax != 'default') {
+            $Command->setconfiguration('maxValue', $valuemax);
+            $Command->save();
+        }
+
         $createRefreshCmd = true;
         $refresh = $this->getCmd(null, 'refresh');
         if (!is_object($refresh)) {
@@ -221,18 +230,20 @@ class rosee extends eqLogic
             $_iconname_td = 1;
             $_iconname_td_num = 1;
         } else if ($calcul == 'temperature') {
+            $td_num_min = -7;
             $td_num_max = 8;
             $td_num_visible = 0;
             $td_num = 1;
             $template_td = $templatecore_V4 . 'multiline';
             $template_td_num = $templatecore_V4 . 'line';
-            $name_td = 'Degré de comfort';
-            $name_td_num = 'Degré de comfort numérique';
+            $name_td = 'Message';
+            $name_td_num = 'Message numérique';
             $_iconname_td = 1;
             $_iconname_td_num = null;
             $alert1 = 'Pré Alerte Humidex';
             $alert2 = 'Alerte Humidex';
         } else {
+            $td_num_min = '0';
             $td_num_max = 3;
             $td_num_visible = 0;
             $td_num = 1;
@@ -273,15 +284,15 @@ class rosee extends eqLogic
             }
         }
         if ($calcul == 'temperature') {
-            $Equipement->AddCommand('Windchill', 'windchill', 'info', 'numeric', $templatecore_V4 . 'line', '°C', 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 1, null);
+            $Equipement->AddCommand('Température ressentie', 'windchill', 'info', 'numeric', $templatecore_V4 . 'line', '°C', 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 1, null);
             $order++;
             $Equipement->AddCommand('Indice de chaleur', 'heat_index', 'info', 'numeric', $templatecore_V4 . 'multiline', '°C', 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 1, null);
             $order++;
         }
-        if ($calcul != 'humidityabs') {
+        if ($calcul != 'humidityabs' && $calcul != null) {
             $Equipement->AddCommand($name_td, 'td', 'info', 'string', $template_td, null, 'WEATHER_CONDITION', $td_num, 'default', 'default', 'default', 'default', $order, '0', true, $_iconname_td, null, null, null);
             $order++;
-            $Equipement->AddCommand($name_td_num, 'td_num', 'info', 'numeric', $template_td_num, null, 'GENERIC_INFO', $td_num_visible, 'default', 'default', '0', $td_num_max, $order, '0', true, $_iconname_td_num, null, null, null);
+            $Equipement->AddCommand($name_td_num, 'td_num', 'info', 'numeric', $template_td_num, null, 'GENERIC_INFO', $td_num_visible, 'default', 'default', $td_num_min, $td_num_max, $order, '0', true, $_iconname_td_num, null, null, null);
             $order++;
         }
 
@@ -289,7 +300,7 @@ class rosee extends eqLogic
             $Equipement->AddCommand('Température', 'temperature', 'info', 'numeric', $templatecore_V4 . 'line', '°C', 'WEATHER_TEMPERATURE', 0, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
             $order++;
         }
-        if ($calcul != 'temperature') {
+        if ($calcul != 'temperature' && $calcul != null) {
             $Equipement->AddCommand('Pression Atmosphérique', 'pressure', 'info', 'numeric', $templatecore_V4 . 'line', 'hPa', 'WEATHER_PRESSURE', 0, 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 2, null);
             $order++;
         }
@@ -404,7 +415,7 @@ class rosee extends eqLogic
                 log::add(__CLASS__, 'debug', '│ La vitesse du vent sélectionnée est en m/s, le plugin va convertir en km/h');
                 $wind = $wind * 3.6;
                 $wind_unite = ' km/h';
-                log::add(__CLASS__, 'debug', '│ Vent : ' . $wind  . $wind_unite);
+                log::add(__CLASS__, 'debug', '│ Vent : ' . $wind  . ' ' . $wind_unite);
             }
         }
 
@@ -644,7 +655,7 @@ class rosee extends eqLogic
                             }
                             break;
                         case "wind":
-                            log::add(__CLASS__, 'debug', '│ Vitesse du vent : ' . $wind . $wind_unite);
+                            log::add(__CLASS__, 'debug', '│ Vitesse du vent : ' . $wind . ' ' . $wind_unite);
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $wind);
                             break;
                         case "windchill":
@@ -848,18 +859,20 @@ class rosee extends eqLogic
     public static function getTemperature($wind, $temperature, $humidity, $pre_seuil, $seuil)
     {
         /*  ********************** Calcul du Windchill *************************** */
-        log::add(__CLASS__, 'debug', '│ ┌───────── CALCUL DU WINDCHILL');
-
+        log::add(__CLASS__, 'debug', '│ ┌───────── CALCUL DU WINDCHILL / REFROIDISSEMENT EOLIEN');
+        // sources : https://fr.m.wikipedia.org/wiki/Refroidissement_éolien#Calcul
         if ($temperature > 10.0) {
             $windchill = $temperature;
         } else {
             if ($wind >= 4.8) {
-                $Terme1 = 13.12 + 0.6215 * $temperature;
-                $Terme2 = 0.3965 * $temperature - 11.37;
-                $Terme3 = pow($wind, 0.16);
-                $windchill = $Terme2 * $Terme3 + $Terme1;
+                $Rc1 = 13.12 + 0.6215 * $temperature;
+                $Rc2 = 0.3965 * $temperature - 11.37;
+                $Rc3 = pow($wind, 0.16);
+                $windchill = $Rc1 + ($Rc2 * $Rc3);
             } else {
-                $windchill = $temperature + 0.2 * (0.1345 * $temperature - 1.59) * $wind;
+                $Rc2 = 0.1345 * $temperature - 1.59;
+                $Rc3 = 0.2 * $Rc2;
+                $windchill = $temperature + $Rc3 * $wind;
             }
         }
         log::add(__CLASS__, 'debug', '│ │ Windchill : ' . $windchill . '°C');
@@ -888,30 +901,55 @@ class rosee extends eqLogic
         $heat_index = ($heat_index_F - 32.0) / 1.8;
         log::add(__CLASS__, 'debug', '│ │ Indice de Chaleur (Humidex) : ' . $heat_index . ' °C');
 
-        if ($heat_index < 15.0) {
-            $td = 'Sensation de frais ou de froid';
-            $td_num = 1;
-        } elseif ($heat_index >= 15.0 && $heat_index <= 19.0) {
-            $td = 'Aucun inconfort';
-            $td_num = 2;
-        } elseif ($heat_index > 19.0 && $heat_index <= 29.0) {
-            $td = "Sensation de bien être";
-            $td_num = 3;
-        } elseif ($heat_index > 29.0 && $heat_index <= 34.0) {
-            $td = "Sensation d'inconfort plus ou moins grande";
-            $td_num = 4;
-        } elseif ($heat_index > 34.0 && $heat_index <= 39.0) {
-            $td = "Sensation d'inconfort assez grande. Prudence. Ralentir certaines activités en plein air.";
-            $td_num = 5;
-        } elseif ($heat_index > 39.0 && $heat_index <= 45.0) {
-            $td = "Sensation d'inconfort généralisée. Danger. Éviter les efforts.";
-            $td_num = 6;
-        } elseif ($heat_index > 45.0 && $heat_index <= 53.0) {
-            $td = 'Danger extrême. Arrêt de travail dans de nombreux domaines.';
-            $td_num = 7;
+        if ($temperature < 10) {
+            if (0 < $windchill) {
+                $td = 'Sans risque de gelures ni d’hypothermie (pour une exposition normale)';
+                $td_num = -1;
+            } else if (-10 < $windchill && 0 <= $windchill) {
+                $td = 'Faible risque de gelures';
+                $td_num = -2;
+            } else if (-28 < $windchill && -10 <= $windchill) {
+                $td = 'Faible risque de gelures et d’hypothermie';
+                $td_num = -3;
+            } else if (-40 < $windchill && -28 <= $windchill) {
+                $td = 'Risque modéré de gelures en 10 à 30 minutes de la peau exposée et d’hypothermie';
+                $td_num = -4;
+            } else if (-48 < $windchill && -40 <= $windchill) {
+                $td = 'Risque élevé de gelures en 5 à 10 minutes (voir note) de la peau exposée et d’hypothermie';
+                $td_num = -5;
+            } else if (-55 < $windchill && -48 <= $windchill) {
+                $td = 'Risque très élevé de gelures en 2 à 5 minutes (voir note) sans protection intégrale ni activité';
+                $td_num = -6;
+            } else if ($windchill <= -55) {
+                $td = 'Danger ! Risque extrêmement élevé de gelures en moins de 2 minutes (voir note) et d\'hypothermie. Rester à l\'abri';
+                $td_num = -7;
+            }
         } else {
-            $td = 'Coup de chaleur imminent (danger de mort).';
-            $td_num = 8;
+            if ($heat_index < 15.0) {
+                $td_num = 1;
+                $td = 'Sensation de frais ou de froid';
+            } elseif ($heat_index >= 15.0 && $heat_index <= 19.0) {
+                $td = 'Aucun inconfort';
+                $td_num = 2;
+            } elseif ($heat_index > 19.0 && $heat_index <= 29.0) {
+                $td = "Sensation de bien être";
+                $td_num = 3;
+            } elseif ($heat_index > 29.0 && $heat_index <= 34.0) {
+                $td = "Sensation d'inconfort plus ou moins grande";
+                $td_num = 4;
+            } elseif ($heat_index > 34.0 && $heat_index <= 39.0) {
+                $td = "Sensation d'inconfort assez grande. Prudence. Ralentir certaines activités en plein air.";
+                $td_num = 5;
+            } elseif ($heat_index > 39.0 && $heat_index <= 45.0) {
+                $td = "Sensation d'inconfort généralisée. Danger. Éviter les efforts.";
+                $td_num = 6;
+            } elseif ($heat_index > 45.0 && $heat_index <= 53.0) {
+                $td = 'Danger extrême. Arrêt de travail dans de nombreux domaines.';
+                $td_num = 7;
+            } else {
+                $td = 'Coup de chaleur imminent (danger de mort).';
+                $td_num = 8;
+            }
         }
         log::add(__CLASS__, 'debug', '│ └─────────');
 

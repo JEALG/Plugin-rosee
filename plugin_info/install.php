@@ -71,6 +71,9 @@ function rosee_update()
         updateLogicalId($eqLogic, 'humidityabs', null, '2');
         updateLogicalId($eqLogic, 'rosee', null, '2');
         updateLogicalId($eqLogic, 'givrage', null, '2');
+        updateLogicalId($eqLogic, 'td', null, null, 'Message'); // Modification du 7/12/2020
+        updateLogicalId($eqLogic, 'td_num', null, null, 'Message numérique'); // Modification du 7/12/2020
+        updateLogicalId($eqLogic, 'windchill', null, null, 'Température ressentie'); // Modification du 7/12/2020
     }
 
     //resave eqLogics for new cmd:
@@ -91,7 +94,7 @@ function rosee_update()
     }
 }
 
-function updateLogicalId($eqLogic, $from, $to, $_historizeRound = null)
+function updateLogicalId($eqLogic, $from, $to, $_historizeRound = null, $name = null)
 {
     $command = $eqLogic->getCmd(null, $from);
     if (is_object($command)) {
@@ -101,6 +104,9 @@ function updateLogicalId($eqLogic, $from, $to, $_historizeRound = null)
         if ($_historizeRound != null) {
             log::add('rosee', 'debug', 'Correction arrondi pour : ' . $from . 'Par :' . $_historizeRound);
             $command->setConfiguration('historizeRound', $_historizeRound);
+        }
+        if ($name != null) {
+            $command->setName($name);
         }
         $command->save();
     }
