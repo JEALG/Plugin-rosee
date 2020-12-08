@@ -286,7 +286,7 @@ class rosee extends eqLogic
         if ($calcul == 'temperature') {
             $Equipement->AddCommand('Température ressentie', 'windchill', 'info', 'numeric', $templatecore_V4 . 'line', '°C', 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 1, null);
             $order++;
-            $Equipement->AddCommand('Indice de chaleur', 'heat_index', 'info', 'numeric', $templatecore_V4 . 'multiline', '°C', 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 1, null);
+            $Equipement->AddCommand('Indice de Chaleur (Humidex)', 'humidex', 'info', 'numeric', $templatecore_V4 . 'line', null, 'GENERIC_INFO', '0', 'default', 'default', 'default', 'default', $order, '0', true, 'default', null, 1, null);
             $order++;
         }
         if ($calcul != 'humidityabs' && $calcul != null) {
@@ -559,7 +559,7 @@ class rosee extends eqLogic
             $windchill = $result_T[0];
             $td = $result_T[1];
             $td_num = $result_T[2];
-            $heat_index = $result_T[3];
+            $humidex = $result_T[3];
             $alert_1 = $result_T[4];
             $alert_2 = $result_T[5];
             log::add(__CLASS__, 'debug', '└─────────');
@@ -596,9 +596,9 @@ class rosee extends eqLogic
                             log::add(__CLASS__, 'debug', '│ Point de givrage : ' . $frost_point . ' °C');
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $frost_point);
                             break;
-                        case "heat_index":
-                            log::add(__CLASS__, 'debug', '│ Indice de Chaleur (Humidex) : ' . $heat_index . ' °C');
-                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $heat_index);
+                        case "humidex":
+                            log::add(__CLASS__, 'debug', '│ Indice de Chaleur (Humidex) : ' . $humidex);
+                            $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $humidex);
                             break;
                         case "humidityabs":
                             log::add(__CLASS__, 'debug', '│ Humidité Absolue : ' . $humidityabs_m3 . ' g/m3');
@@ -625,7 +625,7 @@ class rosee extends eqLogic
                                 if ($calcul == 'tendance') {
                                     $log = ' Tendance (format texte) : ';
                                 } else if ($calcul == 'temperature') {
-                                    $log = ' Degré de comfort (format texte) : ';
+                                    $log = ' Message (format texte) : ';
                                 } else {
                                     $log = ' Message Alerte givre (format texte) : ';
                                 }
@@ -644,7 +644,7 @@ class rosee extends eqLogic
                                 if ($calcul == 'tendance') {
                                     $log = ' Tendance (format numérique) : ';
                                 } else if ($calcul == 'temperature') {
-                                    $log = ' Degré de comfort (format numérique) : ';
+                                    $log = ' Message (format numérique) : ';
                                 } else {
                                     $log = ' Message Alerte givre (format numérique) : ';
                                 }
@@ -659,7 +659,7 @@ class rosee extends eqLogic
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $wind);
                             break;
                         case "windchill":
-                            log::add(__CLASS__, 'debug', '│ Windchill : ' . $windchill . ' °C');
+                            log::add(__CLASS__, 'debug', '│ Température ressentie (Windchill) : ' . $windchill . ' °C');
                             $Equipement->checkAndUpdateCmd($Command->getLogicalId(), $windchill);
                             break;
                         default:
@@ -859,7 +859,7 @@ class rosee extends eqLogic
     public static function getTemperature($wind, $temperature, $humidity, $pre_seuil, $seuil)
     {
         /*  ********************** Calcul du Windchill *************************** */
-        log::add(__CLASS__, 'debug', '│ ┌───────── CALCUL DU WINDCHILL / REFROIDISSEMENT EOLIEN');
+        log::add(__CLASS__, 'debug', '│ ┌───────── CALCUL DE LA TEMPERATURE RESSENTIE (WINDCHILL)');
         // sources : https://fr.m.wikipedia.org/wiki/Refroidissement_éolien#Calcul
         if ($temperature > 10.0) {
             $windchill = $temperature;
@@ -875,31 +875,28 @@ class rosee extends eqLogic
                 $windchill = $temperature + $Rc3 * $wind;
             }
         }
-        log::add(__CLASS__, 'debug', '│ │ Windchill : ' . $windchill . '°C');
+        log::add(__CLASS__, 'debug', '│ │ Température ressentie (Windchill) : ' . $windchill . '°C');
         log::add(__CLASS__, 'debug', '│ └───────');
 
         /*  ********************** Calcul de l'indice de chaleur *************************** */
         log::add(__CLASS__, 'debug', '│ ┌───────── CALCUL DU FACTEUR HUMIDEX');
-        $c1 = -42.379;
-        $c2 = 2.04901523;
-        $c3 = 10.14333127;
-        $c4 = -0.22475541;
-        $c5 = -6.83783 * pow(10, -3);
-        $c6 = -5.481717 * pow(10, -2);
-        $c7 = 1.22874 * pow(10, -3);
-        $c8 = 8.5282 * pow(10, -4);
-        $c9 = -1.99 * pow(10, -6);
-        $tempF = 32.0 + 1.8 * $temperature;
-        log::add(__CLASS__, 'debug', '│ │ Température (F) : ' . $tempF . ' F');
-        $terme1 = $c1 + $c2 * $tempF + $c3 * $humidity + $c4 * $tempF * $humidity;
-        $terme2 = $c5 * pow($tempF, 2.0);
-        $terme3 = $c6 * pow($humidity, 2.0);
-        $terme4 = $c7 * $humidity * pow($tempF, 2.0);
-        $terme5 = $c8 * $tempF * pow($humidity, 2.0);
-        $terme6 = $c9 * pow($tempF, 2.0) * pow($humidity, 2.0);
-        $heat_index_F = $terme1 + $terme2 + $terme3 + $terme4 + $terme5 + $terme6;
-        $heat_index = ($heat_index_F - 32.0) / 1.8;
-        log::add(__CLASS__, 'debug', '│ │ Indice de Chaleur (Humidex) : ' . $heat_index . ' °C');
+        // sources : http://www.meteo-mussidan.fr/hum.php
+        $var1 = null;
+        // Calcul pression vapeur eau
+        $temperature_k = $temperature + 273.15;
+        log::add(__CLASS__, 'debug', '│ │ Temperature Kelvin : ' . $temperature_k . ' K');
+        // Partage calcul
+        $var1 = (-2937.4 / $temperature_k);
+        $eTs = pow(10, ($var1 - 4.9283 * log($temperature_k) / 2.302585092994046 + 23.5471));
+        $eTd = $eTs * $humidity / 100;
+        //Calcul de l'humidex
+        $humidex = round($temperature + (($eTd - 10) * 5 / 9));
+        if ($humidex  < $temperature) {
+            log::add(__CLASS__, 'debug', '│ │ Indice de Chaleur (Humidex) < Température : ' . $humidex);
+            $humidex  = $temperature;
+        } else {
+            log::add(__CLASS__, 'debug', '│ │ Indice de Chaleur (Humidex) : ' . $humidex);
+        }
 
         if ($temperature < 10) {
             if (0 < $windchill) {
@@ -925,25 +922,25 @@ class rosee extends eqLogic
                 $td_num = -7;
             }
         } else {
-            if ($heat_index < 15.0) {
+            if ($humidex < 15.0) {
                 $td_num = 1;
                 $td = 'Sensation de frais ou de froid';
-            } elseif ($heat_index >= 15.0 && $heat_index <= 19.0) {
+            } elseif ($humidex >= 15.0 && $humidex <= 19.0) {
                 $td = 'Aucun inconfort';
                 $td_num = 2;
-            } elseif ($heat_index > 19.0 && $heat_index <= 29.0) {
+            } elseif ($humidex > 19.0 && $humidex <= 29.0) {
                 $td = "Sensation de bien être";
                 $td_num = 3;
-            } elseif ($heat_index > 29.0 && $heat_index <= 34.0) {
+            } elseif ($humidex > 29.0 && $humidex <= 34.0) {
                 $td = "Sensation d'inconfort plus ou moins grande";
                 $td_num = 4;
-            } elseif ($heat_index > 34.0 && $heat_index <= 39.0) {
+            } elseif ($humidex > 34.0 && $humidex <= 39.0) {
                 $td = "Sensation d'inconfort assez grande. Prudence. Ralentir certaines activités en plein air.";
                 $td_num = 5;
-            } elseif ($heat_index > 39.0 && $heat_index <= 45.0) {
+            } elseif ($humidex > 39.0 && $humidex <= 45.0) {
                 $td = "Sensation d'inconfort généralisée. Danger. Éviter les efforts.";
                 $td_num = 6;
-            } elseif ($heat_index > 45.0 && $heat_index <= 53.0) {
+            } elseif ($humidex > 45.0 && $humidex <= 53.0) {
                 $td = 'Danger extrême. Arrêt de travail dans de nombreux domaines.';
                 $td_num = 7;
             } else {
@@ -955,14 +952,14 @@ class rosee extends eqLogic
 
         /*  ********************** Calcul de l'alerte inconfort indice de chaleur en fonction du seuil d'alerte *************************** */
         log::add(__CLASS__, 'debug', '│ ┌───────── ALERTE HUMIDEX');
-        if (($heat_index) >= $pre_seuil) {
+        if (($humidex) >= $pre_seuil) {
             $alert_1 = 1;
         } else {
             $alert_1 = 0;
         }
         log::add(__CLASS__, 'debug', '│ │ Seuil Pré-alerte Humidex : ' . $alert_1);
 
-        if (($heat_index) >= $seuil) {
+        if (($humidex) >= $seuil) {
             $alert_2 = 1;
         } else {
             $alert_2 = 0;
@@ -971,7 +968,7 @@ class rosee extends eqLogic
         log::add(__CLASS__, 'debug', '│ └─────────');
 
 
-        return array($windchill, $td, $td_num, $heat_index, $alert_1, $alert_2);
+        return array($windchill, $td, $td_num, $humidex, $alert_1, $alert_2);
     }
 }
 
