@@ -25,6 +25,10 @@ class rosee extends eqLogic
     /*     * *************************Attributs****************************** */
 
     /*     * ***********************Methode static*************************** */
+    public static function deadCmd()
+    {
+        return array();
+    }
     public static function cron5($_eqlogic_id = null)
     {
         foreach (eqLogic::byType('rosee') as $rosee) {
@@ -223,7 +227,7 @@ class rosee extends eqLogic
             $td_num_max = 5;
             $td_num_visible = 1;
             $td_num = 1;
-            $template_td = $templatecore_V4 . 'multiline';
+            $template_td = 'default';
             $template_td_num = 'rosee::tendance';
             $name_td = 'Tendance';
             $name_td_num = 'Tendance numérique';
@@ -234,7 +238,7 @@ class rosee extends eqLogic
             $td_num_max = 8;
             $td_num_visible = 0;
             $td_num = 1;
-            $template_td = $templatecore_V4 . 'multiline';
+            $template_td = 'default';
             $template_td_num = $templatecore_V4 . 'line';
             $name_td = 'Message';
             $name_td_num = 'Message numérique';
@@ -247,7 +251,7 @@ class rosee extends eqLogic
             $td_num_max = 3;
             $td_num_visible = 0;
             $td_num = 1;
-            $template_td = $templatecore_V4 . 'multiline';
+            $template_td = 'default';
             $template_td_num = $templatecore_V4 . 'line';
             $name_td = 'Message';
             $name_td_num = 'Message numérique';

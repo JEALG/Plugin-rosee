@@ -24,10 +24,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
             </div>
         </div>
         <!-- Champ de recherche -->
-        <div class="input-group" style="margin:5px;">
+        <div class="input-group" style="margin-bottom:5px;">
             <input class="form-control roundedLeft" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
             <div class="input-group-btn">
-                <a id="bt_resetSearch" class="btn roundedRight" style="width:30px"><i class="fas fa-times"></i> </a>
+                <a id="bt_resetObjectSearch" class="btn" style="width:30px"><i class="fas fa-times"></i>
+                </a><a class="btn roundedRight hidden" id="bt_pluginDisplayAsTable" data-coreSupport="1" data-state="0"><i class="fas fa-grip-lines"></i></a>
             </div>
         </div>
         <!-- Liste des équipements du plugin "Mes équipements : Mes Points de Rosée, de Givre" -->
@@ -156,8 +157,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                             <?php
                                             $options = '';
                                             foreach ((jeeObject::buildTree(null, false)) as $object) {
-                                                $decay = $object->getConfiguration('parentNumber');
-                                                $options .= '<option value="' . $object->getId() . '">' . str_repeat('&nbsp;&nbsp;', $decay) . $object->getName() . '</option>';
+                                                $options .= '<option value="' . $object->getId() . '">' . str_repeat('&nbsp;&nbsp;', $object->getConfiguration('parentNumber')) . $object->getName() . '</option>';
                                             }
                                             echo $options;
                                             ?>
@@ -220,7 +220,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-sm-3 control-label">{{Offset Température}}
                                         <sup><i class="fas fa-question-circle" title="{{A ajuster en fonction des observations locales et de la position de la sonde, 0 par défaut.}}"></i></sup>
                                     </label>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="OffsetT" placeholder="0">
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-sm-3 control-label">{{Seuil de l'Alerte Rosée}}
                                         <sup><i class="fas fa-question-circle" title="{{(°C) Seuil de déclenchement de l'alerte rosée, 2°C par défaut (dépression du point de rosée T°-Tr°) A ajuster en fonction des observations locales.}}"></i></sup>
                                     </label>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="DPR" placeholder="2">
                                     </div>
                                 </div>
@@ -275,7 +275,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-sm-3 control-label">{{Seuil d'Humidité Absolue}}
                                         <sup><i class="fas fa-question-circle" title="{{Seuil d'humidité absolue en dessous duquel il est peu probable qu'il givre, 2.8 par défaut.}}"></i></sup>
                                     </label>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="SHA" placeholder="2.8">
                                     </div>
                                 </div>
@@ -283,7 +283,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-sm-3 control-label">{{Seuil Pré-alerte Humidex}}
                                         <sup><i class="fas fa-question-circle" title="{{(°C) Seuil de déclenchement de la pré-alerte inconfort de l'indice de température, 30°C par défaut}}"></i></sup>
                                     </label>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <input type="number" step="0.1"" class=" eqLogicAttr form-control" data-l1key="configuration" data-l2key="PRE_SEUIL" value="30" placeholder="{{30}}">
                                     </div>
                                 </div>
@@ -291,7 +291,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-sm-3 control-label">{{Seuil Alerte Haute Humidex}}
                                         <sup><i class="fas fa-question-circle" title="{{(°C) Seuil de déclenchement de l'alerte inconfort de l'indice de température, 40°C par défaut (seuil de danger)}}"></i></sup>
                                     </label>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <input type="number" step="0.1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="SEUIL" value="40" placeholder="{{40}}">
                                     </div>
                                 </div>
