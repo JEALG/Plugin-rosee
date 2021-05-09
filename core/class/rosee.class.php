@@ -335,8 +335,8 @@ class rosee extends eqLogic
         if (!$this->getIsEnable()) return;
 
         if ($this->getConfiguration('type_calcul') == '') {
-            throw new Exception(__('Le champ "Calcul" ne peut être vide', __FILE__));
-            log::add(__CLASS__, 'error', '│ Configuration : Méthode de Calcul inexistant : ' . $this->getConfiguration('type_calcul'));
+            throw new Exception(__('Le champ "Calcul" ne peut être vide pour l\'équipement : ' . $this->getName(), __FILE__));
+            log::add(__CLASS__, 'error', '│ Configuration : Méthode de Calcul inexistant pour l\'équipement : ' . $this->getName() . ' ' . $this->getConfiguration('type_calcul'));
         }
     }
 
@@ -375,8 +375,8 @@ class rosee extends eqLogic
         /*  ********************** Calcul *************************** */
         $calcul = $this->getConfiguration('type_calcul');
         if ($calcul == '') {
-            throw new Exception(__('Le champ "Calcul" ne peut être vide', __FILE__));
-            log::add(__CLASS__, 'error', '│ Configuration : Méthode de Calcul inexistant : ' . $this->getConfiguration('type_calcul'));
+            throw new Exception(__('Le champ "Calcul" ne peut être vide pour l\'équipement : ' . $this->getName(), __FILE__));
+            log::add(__CLASS__, 'error', '│ Configuration : Méthode de Calcul inexistant pour l\'équipement : ' . $this->getName() . ' ' . $this->getConfiguration('type_calcul'));
         }
         log::add(__CLASS__, 'debug', '│ Méthode de calcul : ' . $calcul);
 
@@ -388,8 +388,8 @@ class rosee extends eqLogic
             log::add(__CLASS__, 'debug', '│ Température : ' . $temperature . ' °C');
         } else {
             if ($calcul != 'tendance') {
-                throw new Exception(__('Le champ "Température" ne peut être vide', __FILE__));
-                log::add(__CLASS__, 'error', '│ Configuration : Température inexistante : ' . $this->getConfiguration('temperature'));
+                throw new Exception(__('Le champ "Température" ne peut être vide pour l\'équipement : ' . $this->getName(), __FILE__));
+                log::add(__CLASS__, 'error', '│ Configuration : Température inexistant pour l\'équipement : ' . $this->getName() . ' ' . $this->getConfiguration('temperature'));
             }
         }
 
@@ -412,8 +412,8 @@ class rosee extends eqLogic
                 $wind_unite = $cmdvirt->getUnite();
                 log::add(__CLASS__, 'debug', '│ Vent : ' . $wind . ' ' . $wind_unite);
             } else {
-                throw new Exception(__('Le champ "Vitesse du Vent" ne peut être vide', __FILE__));
-                log::add(__CLASS__, 'error', 'Configuration : vent non existant : ' . $this->getConfiguration('wind'));
+                throw new Exception(__('Le champ "Vent" ne peut être vide pour l\'équipement : ' . $this->getName(), __FILE__));
+                log::add(__CLASS__, 'error', '│ Configuration : vent inexistant pour l\'équipement : ' . $this->getName() . ' ' . $this->getConfiguration('wind'));
             }
             if ($wind_unite == 'm/s') {
                 log::add(__CLASS__, 'debug', '│ La vitesse du vent sélectionnée est en m/s, le plugin va convertir en km/h');
@@ -457,8 +457,8 @@ class rosee extends eqLogic
                     $pressure = $cmdvirt->execCmd();
                     log::add(__CLASS__, 'debug', '│ Pression Atmosphérique : ' . $pressure . ' hPa');
                 } else {
-                    throw new Exception(__('Le champ "Pression Atmosphérique" ne peut être vide', __FILE__));
-                    log::add(__CLASS__, 'error', '│ Configuration : Pression Atmosphérique inexistante : ' . $this->getConfiguration('pression'));
+                    throw new Exception(__('Le champ "Pression Atmosphérique" ne peut être vide pour l\'équipement : ' . $this->getName(), __FILE__));
+                    log::add(__CLASS__, 'error', '│ Configuration : Pression Atmosphérique inexistant pour l\'équipement : ' . $this->getName() . ' ' . $this->getConfiguration('pression'));
                 }
             }
         }
@@ -470,8 +470,8 @@ class rosee extends eqLogic
             log::add(__CLASS__, 'debug', '│ Humidité Relative : ' . $humidity . ' %');
         } else {
             if ($calcul != 'tendance') {
-                throw new Exception(__('Le champ "Humidité Relative" ne peut être vide', __FILE__));
-                log::add(__CLASS__, 'error', '│ Configuration : Humidité Relative  inexistante : ' . $this->getConfiguration('humidite'));
+                throw new Exception(__('Le champ "Humidité Relative" ne peut être vide pour l\'équipement : ' . $this->getName(), __FILE__));
+                log::add(__CLASS__, 'error', '│ Configuration : Humidité Relative inexistant pour l\'équipement : ' . $this->getName() . ' ' . $this->getConfiguration('humidite'));
             }
         }
 
